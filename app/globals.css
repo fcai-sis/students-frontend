@@ -8,26 +8,49 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+html,
+body {
+  @apply bg-slate-100;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+* {
+  @apply text-slate-800;
 }
+
+/* @media (prefers-color-scheme: dark) { */
+/*   :root { */
+/*     --foreground-rgb: 255, 255, 255; */
+/*     --background-start-rgb: 0, 0, 0; */
+/*     --background-end-rgb: 0, 0, 0; */
+/*   } */
+/* } */
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  @apply w-3;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-slate-300;
+  @apply rounded-md;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-400;
+
+  @apply rounded-md;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply hover:bg-slate-500
 }
