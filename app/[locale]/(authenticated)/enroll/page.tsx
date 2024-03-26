@@ -37,9 +37,6 @@ function CourseList() {
         <CourseItem />
         <CourseItem />
         <CourseItem />
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
       </div>
     </div>
   );
@@ -61,9 +58,18 @@ function CourseItem() {
   );
 }
 
+function Slot() {
+  return (
+    <div className="flex flex-col w-32 h-24 bg-slate-100 border-slate-300 border rounded-lg justify-center items-center">
+      <P>Course Name</P>
+      <P>Teacher Name</P>
+    </div>
+  );
+}
+
 // Grid of slots
 function Schedule() {
-  const slots = Array.from({ length: 6 }, (_, i) => [
+  const slots = Array.from({ length: 6 }, (_, __) => [
     {
       startTime: { hour: 8, minute: 0 },
       endTime: { hour: 9, minute: 30 },
@@ -109,27 +115,20 @@ function Schedule() {
         <H3>Schedule</H3>
       </div>
 
-      <div className="grid grid-rows-7 gap-2">
-        <div className="flex flex-row gap-2">
-          <P className="flex items-center min-w-24 rounded-lg">
-            Time
-          </P>
-          {slots[0].map((slot, i) => (
-            <P key={i} className="flex items-center min-w-24 rounded-lg">
-              {slot.startTime.hour}:{slot.startTime.minute} - {slot.endTime.hour}:{slot.endTime.minute}
-            </P>
+      {/* Grid of slots */}
+      <div className="grid grid-cols-7 gap-2">
+        <div className="flex flex-col gap-2">
+          {days.map((day, j) => (
+            <div key={j} className="flex flex-col w-32 h-24 bg-slate-200 border-slate-300 border rounded-lg justify-center items-center">
+              <P>{day.name}</P>
+            </div>
           ))}
         </div>
-        {days.map((day) => (
-          <div key={day.value} className="flex flex-row gap-2">
-            <P className="flex items-center min-w-24 rounded-lg">
-              {day.name}
-            </P>
-            <div className="flex flex-row gap-2">
-              {slots.map((slot, i) => (
-                <Slot key={i} />
-              ))}
-            </div>
+        {slots.map((slot, i) => (
+          <div key={i} className="flex flex-col gap-2">
+            {days.map((day, j) => (
+              <Slot key={j} />
+            ))}
           </div>
         ))}
       </div>
@@ -137,11 +136,3 @@ function Schedule() {
   );
 }
 
-function Slot() {
-  return (
-    <div className="flex flex-col p-4 bg-slate-100 border-slate-300 border rounded-lg">
-      <P>Course Name</P>
-      <P>Teacher Name</P>
-    </div>
-  );
-}
