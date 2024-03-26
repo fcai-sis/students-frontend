@@ -2,23 +2,22 @@ import { P } from "@/components/H";
 
 export default function CourseEnrollmentPage() {
   return (
-    <div className="flex flex-col">
+    <div className='flex flex-col'>
       {/* Main section */}
-      <div className="flex flex-row justify-center items-center gap-4">
+      <div className='flex flex-row justify-center items-center gap-4'>
         <CourseList />
         <Schedule />
       </div>
 
       {/* Buttons section */}
-      <div className="flex flex-row justify-start">
-      </div>
+      <div className='flex flex-row justify-start'></div>
     </div>
   );
 }
 
 function CourseList() {
   return (
-    <div className="flex flex-col overflow-y-auto gap-4 px-3 h-[500px] w-96 bg-slate-100 rounded-lg">
+    <div className='flex flex-col overflow-y-auto gap-4 px-3 h-[500px] w-96 bg-slate-100 rounded-lg'>
       <CourseItem />
       <CourseItem />
       <CourseItem />
@@ -37,14 +36,18 @@ function CourseList() {
 
 function CourseItem() {
   return (
-    <div className="flex flex-row p-4 bg-slate-200 rounded-lg gap-6 justify-between">
+    <div className='flex flex-row p-4 bg-slate-200 rounded-lg gap-6 justify-between'>
       {/* break course name with hypjen */}
-      <P className="break-words break-all">
+      <P className='break-words break-all'>
         Course Name coursecoursecourse WTFWTF
       </P>
-      <div className="flex flex-row gap-2">
-        <button className="px-4 py-2 bg-slate-50 text-blue-500 rounded-lg h-min">S1/S2</button>
-        <button className="px-4 py-2 bg-red-500 text-white rounded-lg h-min">Unenroll</button>
+      <div className='flex flex-row gap-2'>
+        <button className='px-4 py-2 bg-slate-50 text-blue-500 rounded-lg h-min'>
+          S1/S2
+        </button>
+        <button className='px-4 py-2 bg-red-500 text-white rounded-lg h-min'>
+          Unenroll
+        </button>
       </div>
     </div>
   );
@@ -52,14 +55,13 @@ function CourseItem() {
 
 function Slot() {
   return (
-    <div className="flex flex-col w-32 h-20 bg-slate-100 border-slate-300 border rounded-lg justify-center items-center hover:bg-blue-200 transition-colors duration-200 cursor-pointer">
-    </div>
+    <div className='flex flex-col w-32 h-20 bg-slate-100 border-slate-300 border rounded-lg justify-center items-center hover:bg-blue-200 transition-colors duration-200 cursor-pointer'></div>
   );
 }
 
 // Grid of slots
 function Schedule() {
-  const slots = Array.from({ length: 6 }, (_, __) => [
+  const slots = Array.from({ length: 7 }, (_, __) => [
     {
       startTime: { hour: 8, minute: 0 },
       endTime: { hour: 9, minute: 30 },
@@ -100,19 +102,23 @@ function Schedule() {
   ];
 
   return (
-    <div className="grid grid-cols-7 gap-2">
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-col w-32 h-20" />
+    <div className='grid grid-cols-8 gap-2'>
+      <div className='flex flex-col gap-2'>
+        <div className='flex flex-col w-32 h-20' />
         {days.map((day, j) => (
-          <div key={j} className="flex flex-col w-32 h-20 bg-slate-200 border-slate-300 border rounded-lg justify-center items-center">
+          <div
+            key={j}
+            className='flex flex-col w-32 h-20 bg-slate-200 border-slate-300 border rounded-lg justify-center items-center'
+          >
             {day.name}
           </div>
         ))}
       </div>
       {slots.map((slot, i) => (
-        <div key={i} className="flex flex-col gap-2">
-          <div className="flex w-32 h-20 bg-slate-200 border-slate-300 border rounded-lg justify-center items-center">
-            {slot[i].startTime.hour}:{slot[i].startTime.minute} - {slot[i].endTime.hour}:{slot[i].endTime.minute}
+        <div key={i} className='flex flex-col gap-2'>
+          <div className='flex w-32 h-20 bg-slate-200 border-slate-300 border rounded-lg justify-center items-center'>
+            {slot[i].startTime.hour}:{slot[i].startTime.minute} -{" "}
+            {slot[i].endTime.hour}:{slot[i].endTime.minute}
           </div>
           {days.map((_, j) => (
             <Slot key={j} />
@@ -122,4 +128,3 @@ function Schedule() {
     </div>
   );
 }
-
