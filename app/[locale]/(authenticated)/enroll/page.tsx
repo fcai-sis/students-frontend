@@ -1,12 +1,23 @@
-import { P } from "@/components/H";
+import Button from "@/components/Button";
+import { H5, P } from "@/components/H";
 
 export default function CourseEnrollmentPage() {
   return (
     <div className='flex flex-col'>
       {/* Main section */}
       <div className='flex flex-row justify-center items-center gap-4'>
-        <CourseList />
-        <Schedule />
+        <div className='flex flex-col gap-4 items-center'>
+          <div className='flex flex-row gap-4 justify-between items-center'>
+            <H5 className='text-center'>
+              Enrolled courses
+            </H5>
+            <Button variant='primary' className="p-2">
+              Add Course
+            </Button>
+          </div>
+          <CourseList />
+        </div>
+        <Schedule /
       </div>
 
       {/* Buttons section */}
@@ -17,7 +28,7 @@ export default function CourseEnrollmentPage() {
 
 function CourseList() {
   return (
-    <div className='flex flex-col overflow-y-auto gap-4 px-3 h-[500px] w-96 bg-slate-100 rounded-lg'>
+    <div className='flex flex-col overflow-y-auto gap-4 px-3 h-[500px] w-80 bg-slate-100 rounded-lg'>
       <CourseItem />
       <CourseItem />
       <CourseItem />
@@ -36,18 +47,18 @@ function CourseList() {
 
 function CourseItem() {
   return (
-    <div className='flex flex-row p-4 bg-slate-200 rounded-lg gap-6 justify-between'>
+    <div className='flex flex-col p-4 bg-slate-200 rounded-lg gap-6 justify-between'>
       {/* break course name with hypjen */}
       <P className='break-words break-all'>
         Course Name coursecoursecourse WTFWTF
       </P>
-      <div className='flex flex-row gap-2'>
-        <button className='px-4 py-2 bg-slate-50 text-blue-500 rounded-lg h-min'>
+      <div className='flex flex-row gap-2 justify-end'>
+        <Button variant="secondary" className='p-2 bg-slate-50 text-blue-500 rounded-lg h-min'>
           S1/S2
-        </button>
-        <button className='px-4 py-2 bg-red-500 text-white rounded-lg h-min'>
+        </Button>
+        <Button variant="danger" className='p-2 bg-red-500 text-white rounded-lg h-min'>
           Unenroll
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -55,7 +66,9 @@ function CourseItem() {
 
 function Slot() {
   return (
-    <div className='flex flex-col w-32 h-20 bg-slate-100 border-slate-300 border rounded-lg justify-center items-center hover:bg-blue-200 transition-colors duration-200 cursor-pointer'></div>
+    <div
+      className='flex flex-col w-32 h-20 bg-slate-100 border-slate-300 border rounded-lg justify-center items-center hover:bg-blue-200 transition-colors duration-200 cursor-pointer'>
+    </div>
   );
 }
 

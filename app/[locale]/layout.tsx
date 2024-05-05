@@ -2,6 +2,7 @@ import Locale from "intl-locale-textinfo-polyfill";
 import { Rubik } from "next/font/google";
 import "../globals.css";
 import { Metadata } from "next";
+import ChangeLanguageButton from "@/components/ChangeLanguageButton";
 
 const rubik = Rubik({ subsets: ["latin", "arabic"] });
 
@@ -24,7 +25,7 @@ export default function RootLayout({
         className={`${rubik.className} h-screen flex items-center justify-center`}
       >
         {children}
-        {/* a floating button to change the language */}
+        <ChangeLanguageButton />
       </body>
     </html>
   );
