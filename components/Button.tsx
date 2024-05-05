@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Link from "next/link";
 import { ComponentProps, ReactNode } from "react";
 
@@ -39,12 +40,14 @@ export default function Button({
   myHref,
   type,
   disabled,
+  className,
 }: ComponentProps<"button"> & ButtonProps) {
-  const className = buttonClassName(variant);
+  const classname = buttonClassName(variant);
+  const finalClassName = clsx(classname, className);
 
   if (asLink) {
     return (
-      <Link className={className} href={myHref}>
+      <Link className={finalClassName} href={myHref}>
         {children}
         {icon ? icon : <></>}
       </Link>
@@ -55,7 +58,7 @@ export default function Button({
     <button
       type={type}
       onClick={onClick}
-      className={className}
+      className={finalClassName}
       disabled={disabled}
     >
       {children}
