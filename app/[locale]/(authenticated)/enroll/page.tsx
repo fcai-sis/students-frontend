@@ -17,7 +17,7 @@ export default function CourseEnrollmentPage() {
           </div>
           <CourseList />
         </div>
-        <Schedule /
+        <Schedule />
       </div>
 
       {/* Buttons section */}
