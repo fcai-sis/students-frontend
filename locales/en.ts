@@ -1,5 +1,6 @@
 export default {
   search: "Search",
+  globalSearch: "Global Search",
   clickMe: "Click Me",
   studentId: "Student ID",
   studentIdHint: "e.g. 20200123",

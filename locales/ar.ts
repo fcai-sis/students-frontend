@@ -1,5 +1,6 @@
 export default {
   search: "بحث",
+  globalSearch: "البحث العام",
   clickMe: "اضغط هنا",
   studentId: "رقم الطالب",
   studentIdHint: "مثال: 20200123",
