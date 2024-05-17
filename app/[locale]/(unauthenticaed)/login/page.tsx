@@ -1,31 +1,26 @@
-import { H1, H6, P } from "@/components/H";
-import Button from "@/components/Button";
-import TextInputField from "@/components/TextInputField";
+import { H1, P } from "@/components/H";
 
 import Image from "next/image";
 import { getI18n } from "@/locales/server";
+import LoginForm from "./LoginForm";
+import { I18nProviderClient } from "@/locales/client";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export default async function Page({ params: { locale } }: Readonly<{ params: { locale: string } }>) {
+  const session = await getServerSession();
+
+  if (session) {
+    redirect("/");
+  }
+
   const t = await getI18n();
 
   return (
-    // Make this a form
     <div className="flex flex-row items-center justify-center h-96 gap-32">
-      <div className="flex flex-col gap-8 items-center">
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <H6>{t("studentId")}</H6>
-            <TextInputField placeholder={t("studentIdHint")} />
-          </div>
-          <div className="flex flex-col gap-4">
-            <H6>{t("password")}</H6>
-            <TextInputField obscure placeholder={t("passwordHint")} />
-          </div>
-        </div>
-        <Button asLink myHref="/enroll/" variant="primary">
-          {t("login")}
-        </Button>
-      </div>
+      <I18nProviderClient locale={locale}>
+        <LoginForm />
+      </I18nProviderClient>
       <div className="w-0.5 h-full bg-slate-300 rounded-full" />
       <div className="flex flex-col gap-8 items-center">
         <div className="flex flex-row gap-16">
@@ -39,6 +34,6 @@ export default async function Page({ params: { locale } }: Readonly<{ params: { 
           </P>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

@@ -1,9 +1,17 @@
 import { H1, H6 } from "@/components/H";
 import TextInputField from "@/components/TextInputField";
 import { getI18n } from "@/locales/server";
-import { AnnouncementModel, getAnnouncements } from "./api";
+import { AnnouncementModel, getAnnouncements, getSchedule } from "./api";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession();
+
+  if (!session) {
+    redirect("/login");
+  }
+
   return (
     <div>
       <GlobalSearch />
@@ -39,7 +47,8 @@ function MyStats() {
   );
 }
 
-function Schedule() {
+async function Schedule() {
+  const schedule = await getSchedule();
   return (
     <div>
       <H6>My Schedule</H6>

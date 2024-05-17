@@ -1,18 +1,6 @@
+import { getAccessToken } from "@/lib";
+
 export type AnnouncementModel = {
-  /**
-   *{
-      "authorId": {
-        "username": "ayman"
-      },
-      "title": "This is a test announcement",
-      "content": "yo",
-      "academicLevel": null,
-      "department": [],
-      "updatedAt": null,
-      "severity": "info",
-      "createdAt": "2024-05-09T12:15:13.001Z"
-    }
-   */
   authorId: {
     username: string;
   };
@@ -30,7 +18,20 @@ export async function getAnnouncements(): Promise<AnnouncementModel[]> {
 
   const announcements = await response.json();
 
-  console.log(announcements);
-
   return announcements.announcements;
+}
+
+export async function getSchedule(): Promise<any> {
+  const accessToken = await getAccessToken();
+  const response = await fetch(`${process.env.SCHEDULE_API_URL}/schedules/student/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  const schedule = await response.json();
+
+  console.log(schedule);
+
+  return schedule.schedule;
 }
