@@ -2,55 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-html,
-body {
-  @apply bg-slate-100;
-}
-
-* {
-  @apply text-slate-800;
-}
-
-/* @media (prefers-color-scheme: dark) { */
-/*   :root { */
-/*     --foreground-rgb: 255, 255, 255; */
-/*     --background-start-rgb: 0, 0, 0; */
-/*     --background-end-rgb: 0, 0, 0; */
-/*   } */
-/* } */
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
 
-
-/* width */
-::-webkit-scrollbar {
-  @apply w-3;
+.btn {
+  @apply bg-blue-600 text-white disabled:bg-slate-400 disabled:text-slate-100 disabled:cursor-not-allowed;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  @apply bg-slate-300;
-  @apply rounded-md;
+a {
+  @apply text-blue-600 font-bold cursor-pointer border border-blue-600;
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  @apply bg-slate-400;
-
-  @apply rounded-md;
+input,
+textarea,
+select {
+  @apply border border-gray-300;
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  @apply hover:bg-slate-500
+h1 {
+  @apply text-3xl font-bold;
+}
+
+h2 {
+  @apply text-2xl font-bold;
+}
+
+h3 {
+  @apply text-xl font-bold;
+}
+
+h4 {
+  @apply text-lg font-bold;
+}
+
+h5 {
+  @apply text-base font-bold;
+}
+
+h6 {
+  @apply text-sm font-bold;
 }

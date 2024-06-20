@@ -1,17 +1,108 @@
+// locales/en.ts
 export default {
-  search: "Search",
-  globalSearch: "Global Search",
-  clickMe: "Click Me",
-  studentId: "Student ID",
-  studentIdHint: "e.g. 20200123",
-  password: "Password",
-  passwordHint: "•••••••",
-  login: "Login",
-  studentsGateway: "Student Gateway",
-  forFCAICU:
-    "Faculty of Computers and Artificial Intelligence at Cairo University",
-  continue: "Continue",
-  cancel: "Cancel",
-  confirm: "Confirm",
-  back: "Back",
+  general: {
+    loading: "Loading...",
+    submit: "Submit",
+    ok: "OK",
+    cancel: "Cancel",
+    back: "Back",
+    error: {
+      somethingWentWrong: "Something went wrong",
+    },
+  },
+  nav: {
+    home: "Home",
+    students: "Students",
+    announcements: "Announcements",
+    serviceRequests: "Service Requests",
+    profile: "Profile",
+    signOut: "Sign Out",
+  },
+  pagination: {
+    previous: "Previous",
+    next: "Next",
+  },
+  auth: {
+    title: "Login",
+    studentId: "Student ID",
+    password: "Password",
+    login: "Login",
+    success: "Successfully signed in",
+    error: {
+      invalidCredentials: "Invalid credentials",
+    },
+  },
+  home: {
+    title: "Home",
+    greeting: "Hello, {name}",
+    search: "Search",
+    searchPlaceholder: "Search for something",
+    announcements: "Announcements",
+    viewAllAnnouncements: "View All Announcements",
+    serviceRequests: "Service Requests",
+    viewAllServiceRequests: "View All Service Requests",
+  },
+  students: {
+    title: "Students",
+    noStudents: "No students",
+    registerStudent: "Register Student",
+  },
+  registerStudent: {
+    title: "Register Student",
+    manual: {
+      title: "Manual Student Registration",
+    },
+    upload: {
+      title: "Register Students from Excel File",
+      uploadExcelFile: "Upload File",
+      success: "File uploaded successfully",
+      mapping: {
+        title: "Map Columns",
+        instructions:
+          "Map the columns in the Excel file to the fields in the database",
+        unset: "Select a field",
+        success: {
+          updateField: "Field mapping updated successfully",
+          cancel: "Registration session cancelled successfully",
+        },
+        error: {
+          missingColumns: "Please map all columns",
+          updateFailed: "Failed to update field mapping",
+          cancelFailed: "Failed to cancel registration session",
+        },
+      },
+      commit: {
+        title: "Commit Registration Session",
+        success: "Registration session committed successfully",
+        error: {
+          commitFailed: "Failed to commit registration session",
+          row: "Failed to commit row {rowNumber}",
+        },
+      },
+    },
+  },
+  announcements: {
+    title: "Announcements",
+    noAnnouncements: "No announcements",
+    create: {
+      title: "Create Announcement",
+      form: {
+        title: "Title",
+        content: "Content",
+        severity: "Severity",
+        info: "Info",
+        warning: "Warning",
+        danger: "Danger",
+      },
+      success: "Announcement created successfully",
+      error: {
+        createFailed: "Failed to create announcement",
+      },
+    },
+  },
+  serviceRequests: {
+    title: "Service Requests",
+    noServiceRequests: "No service requests",
+    createServiceRequest: "Create Service Request",
+  },
 } as const;
