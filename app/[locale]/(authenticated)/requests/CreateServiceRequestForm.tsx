@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { createServiceRequest } from "./actions";
+import { createServiceRequest, dummyCreateServiceRequest } from "./actions";
 import { useRouter } from "next/navigation";
 
 const createServiceRequestSchema = z.object({
@@ -37,7 +37,7 @@ export default function CreateServiceRequestForm() {
     const formData = new FormData();
     formData.append("serviceName", data.serviceName);
     formData.append("image", data.image[0]);
-    const response = await createServiceRequest(formData);
+    const response = await dummyCreateServiceRequest(formData);
 
     if (!response.success) {
       return toast.error(JSON.stringify(response));

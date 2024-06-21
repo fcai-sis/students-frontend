@@ -1,15 +1,17 @@
 "use server";
 
-import { studentsAPI } from "@/api";
-import { getAccessToken } from "@/lib";
+import { dummyStudents } from "@/dummy/students";
+import { fakeResponse } from "@/dummy/utils";
 import { getI18n } from "@/locales/server";
 
 export default async function Page() {
   const t = await getI18n();
 
-  const getMeResponse = await studentsAPI.get("/me", {
-    headers: {
-      Authorization: `Bearer ${await getAccessToken()}`,
+  const _me = dummyStudents[0];
+  const getMeResponse = await fakeResponse({
+    status: 200,
+    data: {
+      student: _me,
     },
   });
 

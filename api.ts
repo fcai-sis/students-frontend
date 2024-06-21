@@ -19,3 +19,8 @@ export const serviceRequestsAPI = axios.create({
   baseURL: process.env.SERVICE_REQUESTS_API_URL,
   validateStatus: (status) => status < 500,
 });
+
+export const coursesAPI = axios.create({
+  baseURL: process.env.COURSES_API_URL,
+  validateStatus: (status) => status < 500,
+});

@@ -8,6 +8,7 @@ export default async function Navbar({ locale }: { locale: string }) {
   return (
     <nav>
       <Link href="/">{t("nav.home")}</Link>
+      <Link href="/courses">Courses</Link>
       <Link href="/announcements">{t("nav.announcements")}</Link>
       <Link href="/requests">{t("nav.serviceRequests")} </Link>
       <Link href="/profile">{t("nav.profile")}</Link>
