@@ -28,3 +28,8 @@ export const enrollmentsAPI = axios.create({
   baseURL: process.env.ENROLLMENTS_API_URL,
   validateStatus: (status) => status < 500,
 });
+
+export const profileAPI = axios.create({
+  baseURL: process.env.PROFILE_API_URL,
+  validateStatus: (status) => status < 500,
+});
