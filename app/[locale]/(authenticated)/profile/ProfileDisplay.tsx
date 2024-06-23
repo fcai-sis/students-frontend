@@ -7,15 +7,21 @@ import { z } from "zod";
 import { updateProfileAction } from "./actions";
 
 const updateProfileFormSchema = z.object({
-  fullName: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  address: z.string().optional(),
+  fullName: z.string().min(1).optional(),
+  phoneNumber: z
+    .string()
+    .length(11)
+    .refine((value) => {
+      return !isNaN(Number(value));
+    }, "Phone number must be a numeric string")
+    .optional(),
+  address: z.string().min(1).optional(),
 });
 
 export type updateProfileValues = z.infer<typeof updateProfileFormSchema>;
 
 export default function UpdateProfileForm({ profileData }: any) {
-  const profileFieldsLookup = profileData.data.reduce(
+  const profileFieldsLookup = profileData.data.editableFields.reduce(
     (acc: Record<string, any>, item: Record<string, any>) => {
       const key = Object.keys(item)[0];
       acc[key] = item[key];
@@ -54,36 +60,43 @@ export default function UpdateProfileForm({ profileData }: any) {
       <h1>Profile</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Full Name</label>
-        <input
-          {...register("fullName")}
-          type='text'
-          defaultValue={profileFieldsLookup["fullName"]}
-        />
-        {errors.fullName && (
-          <p className='text-red-600'>{errors.fullName?.message}</p>
-        )}
-
-        <label>Phone Number</label>
-        <input
-          {...register("phoneNumber")}
-          type='text'
-          defaultValue={profileFieldsLookup["phoneNumber"]}
-        />
-        {errors.phoneNumber && (
-          <p className='text-red-600'>{errors.phoneNumber?.message}</p>
-        )}
-
-        <label>Address</label>
-        <input
-          {...register("address")}
-          type='text'
-          defaultValue={profileFieldsLookup["address"]}
-        />
-        {errors.address && (
-          <p className='text-red-600'>{errors.address?.message}</p>
-        )}
-
+        <div className='mb-5'>
+          {profileData.data.editableFields.map((field: any) => {
+            const key = Object.keys(field)[0];
+            return (
+              <div key={key}>
+                <label htmlFor={key}>{key}</label>
+                <input
+                  {...register(key as keyof updateProfileValues)}
+                  type='text'
+                  id={key}
+                  defaultValue={profileFieldsLookup[key]}
+                />
+                {errors[key as keyof updateProfileValues] && (
+                  <span className='text-red-500'>
+                    {errors[key as keyof updateProfileValues]?.message}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div>
+          {profileData.data.viewableFields.map((field: any) => {
+            const key = Object.keys(field)[0];
+            return (
+              <div key={key}>
+                <label htmlFor={key}>{key}</label>
+                <input
+                  type='text'
+                  id={key}
+                  defaultValue={field[key]}
+                  disabled
+                />
+              </div>
+            );
+          })}
+        </div>
         <button className='btn' type='submit' disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
         </button>

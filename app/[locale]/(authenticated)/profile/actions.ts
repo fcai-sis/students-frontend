@@ -25,7 +25,13 @@ export const getProfileAction = async () => {
 
   revalidatePath("/profile");
 
-  return { success: true, data: response.data.profile };
+  return {
+    success: true,
+    data: {
+      editableFields: response.data.editableProfileFields,
+      viewableFields: response.data.immutableProfileFields,
+    },
+  };
 };
 
 export const updateProfileAction = async (data: updateProfileValues) => {
