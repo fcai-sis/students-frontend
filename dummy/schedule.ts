@@ -66,6 +66,25 @@ export const dummySchedule: DummySchedule[] = [
     },
   },
   {
+    slot: dummySlots[0],
+    hall: {
+      name: "Main Lecture Hall",
+    },
+    type: "lecture",
+    lecture: {
+      course: {
+        code: "FS231",
+        name: {
+          en: "Introduction to Computer Basics",
+          ar: "مقدمة في علوم الحاسوب",
+        },
+      },
+      instructor: {
+        fullName: "Dr. John Doe",
+      },
+    },
+  },
+  {
     slot: dummySlots[1],
     hall: {
       name: "Main Lecture Hall",
