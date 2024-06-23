@@ -5,6 +5,7 @@ import { fakeResponse } from "@/dummy/utils";
 import { DayEnumType } from "@fcai-sis/shared-models";
 import EnrollInCourseForm from "./EnrollInCourseForm";
 import SelectSectionForm from "./SelectSectionForm";
+import RegisterCourseForm from "./RegisterCourseForm";
 
 /**
  * e.g.
@@ -74,13 +75,13 @@ export default async function Page() {
   return (
     <>
       <h1>Enroll</h1>
-      <div className="table">
-        <div className="table-header-group">
-          <div className="table-row">
-            <div className="table-cell"></div>
+      <div className='table'>
+        <div className='table-header-group'>
+          <div className='table-row'>
+            <div className='table-cell'></div>
             {timeRanges.map((timeRange) => (
               <div
-                className="table-cell border border-black"
+                className='table-cell border border-black'
                 key={JSON.stringify(timeRange)}
               >
                 {formatSlotTime(timeRange as unknown as DummySlot)}
@@ -89,40 +90,54 @@ export default async function Page() {
           </div>
         </div>
         {Object.keys(slots).map((currentDay) => (
-          <div className="table-row" key={currentDay}>
-            <div className="table-cell border border-black">{currentDay}</div>
+          <div className='table-row' key={currentDay}>
+            <div className='table-cell border border-black'>{currentDay}</div>
             {slots[currentDay as DayEnumType].map((currentTimeRange) => (
               <div
-                className="table-cell border border-black   "
+                className='table-cell border border-black   '
                 key={JSON.stringify(currentTimeRange)}
               >
                 {(() => {
-                  const item = schedule.find((scheduleItem) =>
-                    isSameSlot(scheduleItem.slot, currentTimeRange)
+                  // find all items that have the same slot and check if they are lectures or sections
+                  const items = schedule.filter((item) =>
+                    isSameSlot(item.slot, currentTimeRange as DummySlot)
                   );
 
-                  if (!item) return "No lecture";
+                  if (items.length === 0) {
+                    return "No lecture";
+                  }
 
-                  if (item.type === "lecture")
-                    return (
-                      <EnrollInCourseForm
-                        lecture={item.lecture}
-                        hall={item.hall}
-                      />
-                    );
-                  else if (item.type === "section")
-                    return (
-                      <SelectSectionForm
-                        section={item.secion}
-                        hall={item.hall}
-                      />
-                    );
-                  else return "Invalid type";
+                  // map each item to a form based on its type
+                  return items.map((item, index) => {
+                    if (item.type === "lecture") {
+                      return (
+                        <EnrollInCourseForm
+                          key={index}
+                          lecture={item.lecture}
+                          hall={item.hall}
+                        />
+                      );
+                    } else if (item.type === "section") {
+                      return (
+                        <SelectSectionForm
+                          key={index}
+                          section={item.secion}
+                          hall={item.hall}
+                        />
+                      );
+                    } else {
+                      return "Invalid type";
+                    }
+                  });
                 })()}
               </div>
             ))}
           </div>
         ))}
+      </div>
+
+      <div>
+        <RegisterCourseForm courses={eligibleCourses} />
       </div>
     </>
   );
