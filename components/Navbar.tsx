@@ -12,6 +12,8 @@ export default async function Navbar({ locale }: { locale: string }) {
       <Link href="/announcements">{t("nav.announcements")}</Link>
       <Link href="/requests">{t("nav.serviceRequests")} </Link>
       <Link href="/profile">{t("nav.profile")}</Link>
+      <Link href="/instructors">{t("nav.instructors")}</Link>
+      <Link href="/ta">{t("nav.teacherAssistants")}</Link>
       <I18nProviderClient locale={locale}>
         <SignOutButton />
       </I18nProviderClient>

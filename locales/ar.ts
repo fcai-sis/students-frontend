@@ -17,6 +17,8 @@ export default {
     announcements: "الإعلانات",
     serviceRequests: "طلبات الخدمة",
     profile: "الملف الشخصي",
+    instructors: "الدكاترة",
+    teacherAssistants: "المعيدين",
     signOut: "تسجيل الخروج",
   },
   pagination: {

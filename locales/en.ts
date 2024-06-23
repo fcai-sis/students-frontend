@@ -15,6 +15,8 @@ export default {
     students: "Students",
     announcements: "Announcements",
     serviceRequests: "Service Requests",
+    instructors: "Instructors",
+    teacherAssistants: "Teacher Assistants",
     profile: "Profile",
     signOut: "Sign Out",
   },
