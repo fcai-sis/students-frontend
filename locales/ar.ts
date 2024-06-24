@@ -19,6 +19,7 @@ export default {
     profile: "الملف الشخصي",
     instructors: "الدكاترة",
     teacherAssistants: "المعيدين",
+    more: "المزيد",
     signOut: "تسجيل الخروج",
   },
   pagination: {
@@ -84,6 +85,16 @@ export default {
       },
     },
   },
+  courses: {
+    title: "المقررات",
+  },
+  myCourses: {
+    title: "مقرراتي",
+    noCourses: "لا توجد مقررات",
+  },
+  evaluation: {
+    selectRating: "اختر التقييم",
+  },
   announcements: {
     title: "الإعلانات",
     noAnnouncements: "لا توجد إعلانات",
@@ -107,5 +118,8 @@ export default {
     title: "طلبات الخدمة",
     noServiceRequests: "لا توجد طلبات خدمة",
     createServiceRequest: "إنشاء طلب خدمة",
+  },
+  profile: {
+    title: "الملف الشخصي",
   },
 } as const;

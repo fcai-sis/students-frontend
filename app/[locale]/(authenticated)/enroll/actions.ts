@@ -4,6 +4,7 @@ import { getAccessToken } from "@/lib";
 import { revalidatePath } from "next/cache";
 import { enrollInCourseFormValues } from "./RegisterCourseForm";
 import { enrollmentsAPI } from "@/api";
+import { fakeResponse } from "@/dummy/utils";
 
 export const enrollInCourseAction = async (data: enrollInCourseFormValues) => {
   const accessToken = await getAccessToken();
@@ -32,6 +33,26 @@ export const enrollInCourseAction = async (data: enrollInCourseFormValues) => {
   }
 
   revalidatePath("/enroll");
+
+  return { success: true };
+};
+
+export const dummyEnrollInCourseAction = async (
+  data: enrollInCourseFormValues
+) => {
+  const repsonse = await fakeResponse({
+    status: 201,
+    data: {},
+  });
+
+  if (repsonse.status !== 201) {
+    return {
+      success: false,
+      error: {
+        message: "Failed to enroll in course",
+      },
+    };
+  }
 
   return { success: true };
 };

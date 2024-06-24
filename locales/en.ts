@@ -18,6 +18,7 @@ export default {
     instructors: "Instructors",
     teacherAssistants: "Teacher Assistants",
     profile: "Profile",
+    more: "More",
     signOut: "Sign Out",
   },
   pagination: {
@@ -83,6 +84,16 @@ export default {
       },
     },
   },
+  courses: {
+    title: "Courses",
+  },
+  myCourses: {
+    title: "My Courses",
+    noCourses: "No courses",
+  },
+  evaluation: {
+    selectRating: "Select Rating",
+  },
   announcements: {
     title: "Announcements",
     noAnnouncements: "No announcements",
@@ -106,5 +117,8 @@ export default {
     title: "Service Requests",
     noServiceRequests: "No service requests",
     createServiceRequest: "Create Service Request",
+  },
+  profile: {
+    title: "Profile",
   },
 } as const;

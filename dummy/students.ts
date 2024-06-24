@@ -26,6 +26,8 @@ export const dummyStudents = [
     studentId: "20200645",
     currentGpa: 3.5,
     currentLevel: 1,
+    currentDepartment: "Information Systems",
+    completedCreditHours: 114,
   },
   {
     address: "٣٣ جابر بن حيان الدقي، الجيزة",
@@ -47,5 +49,7 @@ export const dummyStudents = [
     studentId: "20200123",
     currentGpa: 2.21,
     currentLevel: 3,
+    currentDepartment: "Computer Science",
+    currentCreditHours: 45,
   },
 ] as const;

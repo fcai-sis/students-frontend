@@ -6,10 +6,7 @@ type SelectSectionFormProps = Readonly<{
   section: DummySection;
   hall: DummyHall;
 }>;
-export default function SelectSectionForm({
-  section,
-  hall,
-}: SelectSectionFormProps) {
+export default function SectionSlot({ section, hall }: SelectSectionFormProps) {
   return (
     <button className="bg-green-100">
       <p>{section.course.name.en}</p>

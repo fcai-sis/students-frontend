@@ -3,8 +3,8 @@ import dummySchedule from "@/dummy/schedule";
 import { DummySlot, dummySlotsByDay, dummyTimeRanges } from "@/dummy/slots";
 import { fakeResponse } from "@/dummy/utils";
 import { DayEnumType } from "@fcai-sis/shared-models";
-import EnrollInCourseForm from "./EnrollInCourseForm";
-import SelectSectionForm from "./SelectSectionForm";
+import LectureSlot from "./LectureSlot";
+import SectionSlot from "./SectionSlot";
 import RegisterCourseForm from "./RegisterCourseForm";
 
 /**
@@ -75,13 +75,13 @@ export default async function Page() {
   return (
     <>
       <h1>Enroll</h1>
-      <div className='table'>
-        <div className='table-header-group'>
-          <div className='table-row'>
-            <div className='table-cell'></div>
+      <div className="table">
+        <div className="table-header-group">
+          <div className="table-row">
+            <div className="table-cell"></div>
             {timeRanges.map((timeRange) => (
               <div
-                className='table-cell border border-black'
+                className="table-cell border border-black"
                 key={JSON.stringify(timeRange)}
               >
                 {formatSlotTime(timeRange as unknown as DummySlot)}
@@ -90,11 +90,11 @@ export default async function Page() {
           </div>
         </div>
         {Object.keys(slots).map((currentDay) => (
-          <div className='table-row' key={currentDay}>
-            <div className='table-cell border border-black'>{currentDay}</div>
+          <div className="table-row" key={currentDay}>
+            <div className="table-cell border border-black">{currentDay}</div>
             {slots[currentDay as DayEnumType].map((currentTimeRange) => (
               <div
-                className='table-cell border border-black   '
+                className="table-cell border border-black   "
                 key={JSON.stringify(currentTimeRange)}
               >
                 {(() => {
@@ -111,7 +111,7 @@ export default async function Page() {
                   return items.map((item, index) => {
                     if (item.type === "lecture") {
                       return (
-                        <EnrollInCourseForm
+                        <LectureSlot
                           key={index}
                           lecture={item.lecture}
                           hall={item.hall}
@@ -119,7 +119,7 @@ export default async function Page() {
                       );
                     } else if (item.type === "section") {
                       return (
-                        <SelectSectionForm
+                        <SectionSlot
                           key={index}
                           section={item.secion}
                           hall={item.hall}
@@ -137,7 +137,7 @@ export default async function Page() {
       </div>
 
       <div>
-        <RegisterCourseForm courses={eligibleCourses} />
+        <RegisterCourseForm courses={eligibleCourses as any} />
       </div>
     </>
   );

@@ -6,7 +6,10 @@ import { signOut } from "next-auth/react";
 export default function SignOutButton() {
   const t = useI18n();
   return (
-    <button className="btn" onClick={() => signOut({ callbackUrl: "/" })}>
+    <button
+      className="text-red-500"
+      onClick={() => signOut({ callbackUrl: "/" })}
+    >
       {t("nav.signOut")}
     </button>
   );

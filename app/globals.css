@@ -8,18 +8,26 @@
   }
 }
 
+* {
+  @apply text-slate-600;
+}
+
 .btn {
-  @apply bg-blue-600 text-white disabled:bg-slate-400 disabled:text-slate-100 disabled:cursor-not-allowed;
+  @apply p-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors duration-300;
 }
 
 a {
-  @apply text-blue-600 font-bold cursor-pointer border border-blue-600;
+  @apply p-2 rounded-lg cursor-pointer hover:bg-slate-200 transition-colors duration-300;
 }
 
 input,
 textarea,
 select {
-  @apply border border-gray-300;
+  @apply p-2 bg-slate-100 rounded-lg;
+}
+
+select {
+  @apply appearance-none;
 }
 
 h1 {

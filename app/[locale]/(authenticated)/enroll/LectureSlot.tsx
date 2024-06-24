@@ -6,7 +6,7 @@ type EnrollInCourseFormProps = Readonly<{
   lecture: DummyLecture;
   hall: DummyHall;
 }>;
-export default function EnrollInCourseForm({
+export default function LectureSlot({
   lecture,
   hall,
 }: EnrollInCourseFormProps) {
