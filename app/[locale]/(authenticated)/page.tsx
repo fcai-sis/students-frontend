@@ -1,9 +1,13 @@
 "use server";
 
 import AnnouncementCard from "@/components/AnnouncementCard";
+import Schedule from "@/components/Schedule";
 import ServiceRequestCard from "@/components/ServiceRequestCard";
 import { dummyAnnouncements } from "@/dummy/announcements";
+import { dummyCourses } from "@/dummy/courses";
+import dummySchedule from "@/dummy/schedule";
 import { dummyServiceRequests } from "@/dummy/serviceRequests";
+import { dummySlotsByDay, dummyTimeRanges } from "@/dummy/slots";
 import { dummyStudents } from "@/dummy/students";
 import { fakeResponse } from "@/dummy/utils";
 import { getI18n } from "@/locales/server";
@@ -44,6 +48,29 @@ export default async function Page() {
 
   const { serviceRequests } = data;
 
+  const _eligibleCourses = dummyCourses;
+  const _schedule = dummySchedule;
+
+  const { data: scheduleData } = await fakeResponse({
+    status: 200,
+    data: {
+      schedule: _schedule,
+    },
+  });
+  const { schedule } = scheduleData;
+
+  const _slots = dummySlotsByDay;
+  const _timeRanges = dummyTimeRanges;
+
+  const { data: slotData } = await fakeResponse({
+    status: 200,
+    data: {
+      slots: _slots,
+      timeRanges: _timeRanges,
+    },
+  });
+  const { slots, timeRanges } = slotData;
+
   return (
     <>
       <div>
@@ -72,6 +99,9 @@ export default async function Page() {
           <b>GPA: </b>
           {student.currentGpa}
         </p>
+      </div>
+      <div>
+        <Schedule slots={slots} timeRanges={timeRanges} schedule={schedule} />
       </div>
       <div>
         <h2>{t("announcements.title")}</h2>

@@ -85,7 +85,7 @@ export const dummySchedule: DummySchedule[] = [
     },
   },
   {
-    slot: dummySlots[1],
+    slot: dummySlots[12],
     hall: {
       name: "Main Lecture Hall",
     },
@@ -104,7 +104,7 @@ export const dummySchedule: DummySchedule[] = [
     },
   },
   {
-    slot: dummySlots[2],
+    slot: dummySlots[22],
     hall: {
       name: "Main Lecture Hall",
     },

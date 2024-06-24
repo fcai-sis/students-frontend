@@ -8,7 +8,7 @@ type SelectSectionFormProps = Readonly<{
 }>;
 export default function SectionSlot({ section, hall }: SelectSectionFormProps) {
   return (
-    <button className="bg-green-100">
+    <div className="bg-slate-100 p-1  rounded-lg">
       <p>{section.course.name.en}</p>
       <p>{section.course.code}</p>
       <p>{section.instructor.fullName}</p>
@@ -16,6 +16,6 @@ export default function SectionSlot({ section, hall }: SelectSectionFormProps) {
       <p>
         <b>{section.group}</b>
       </p>
-    </button>
+    </div>
   );
 }

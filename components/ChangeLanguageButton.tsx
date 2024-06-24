@@ -12,7 +12,7 @@ export default function ChangeLanguageButton() {
   return (
     <button
       onClick={() => changeLocale(to)}
-      className={`btn fixed ${position}`}
+      className={`rounded-lg cursor-pointer bg-slate-100 hover:bg-slate-200 transition-colors duration-300 p-4 shadow-md fixed ${position}`}
     >
       {locale === "ar" ? "English" : "العربية"}
     </button>

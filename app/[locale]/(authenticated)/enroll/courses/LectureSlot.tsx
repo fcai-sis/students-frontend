@@ -11,11 +11,11 @@ export default function LectureSlot({
   hall,
 }: EnrollInCourseFormProps) {
   return (
-    <button className="bg-blue-100">
+    <div className="bg-slate-100 p-1  rounded-lg">
       <p>{lecture.course.name.en}</p>
       <p>{lecture.course.code}</p>
       <p>{lecture.instructor.fullName}</p>
       <p>{hall.name}</p>
-    </button>
+    </div>
   );
 }

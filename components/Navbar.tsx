@@ -6,6 +6,7 @@ import Dropdown from "./Dropdown";
 
 export default async function Navbar({ locale }: { locale: string }) {
   const t = await getI18n();
+
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white flex justify-center items-center p-4 shadow-md gap-4">
       <Link href="/">{t("home.title")}</Link>

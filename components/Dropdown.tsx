@@ -21,7 +21,7 @@ export default function Dropdown({ label, children }: DropdownProps) {
         {label}
       </button>
       <div
-        className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ${
+        className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-lg bg-white shadow-lg ${
           show ? "" : "hidden"
         }`}
       >
