@@ -1,8 +1,6 @@
+import { DummyCourse } from "./courses";
+import { DummyHall, dummyHalls } from "./halls";
 import { DummySlot, dummySlots } from "./slots";
-
-export type DummyHall = {
-  name: string;
-};
 
 export type DummyInstructor = {
   fullName: string;
@@ -12,13 +10,10 @@ export type DummyTA = {
   fullName: string;
 };
 
-export type DummyScheduleCourse = {
-  code: string;
-  name: {
-    en: string;
-    ar: string;
-  };
-};
+export type DummyScheduleCourse = Omit<
+  DummyCourse,
+  "description" | "creditHours" | "departments" | "courseType"
+>;
 
 export type DummyLecture = {
   course: DummyScheduleCourse;
@@ -48,9 +43,7 @@ export type DummySchedule =
 export const dummySchedule: DummySchedule[] = [
   {
     slot: dummySlots[0],
-    hall: {
-      name: "Main Lecture Hall",
-    },
+    hall: dummyHalls[0],
     type: "lecture",
     lecture: {
       course: {
@@ -67,9 +60,7 @@ export const dummySchedule: DummySchedule[] = [
   },
   {
     slot: dummySlots[0],
-    hall: {
-      name: "Main Lecture Hall",
-    },
+    hall: dummyHalls[1],
     type: "lecture",
     lecture: {
       course: {
@@ -86,9 +77,7 @@ export const dummySchedule: DummySchedule[] = [
   },
   {
     slot: dummySlots[12],
-    hall: {
-      name: "Main Lecture Hall",
-    },
+    hall: dummyHalls[2],
     type: "lecture",
     lecture: {
       course: {
@@ -105,9 +94,7 @@ export const dummySchedule: DummySchedule[] = [
   },
   {
     slot: dummySlots[22],
-    hall: {
-      name: "Main Lecture Hall",
-    },
+    hall: dummyHalls[3],
     type: "section",
     secion: {
       group: "S1/S2",
@@ -125,9 +112,7 @@ export const dummySchedule: DummySchedule[] = [
   },
   {
     slot: dummySlots[3],
-    hall: {
-      name: "Main Lecture Hall",
-    },
+    hall: dummyHalls[4],
     type: "lecture",
     lecture: {
       course: {

@@ -1,4 +1,12 @@
-export const dummyHalls = [
+export type DummyHall = {
+  name: {
+    en: string;
+    ar: string;
+  };
+  capacity: number;
+};
+
+export const dummyHalls: DummyHall[] = [
   {
     capacity: 100,
     name: {

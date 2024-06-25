@@ -17,7 +17,7 @@
 }
 
 a {
-  @apply p-2 rounded-lg cursor-pointer hover:bg-slate-200 transition-colors duration-300;
+  @apply p-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors duration-300;
 }
 
 input,
@@ -56,4 +56,10 @@ h5 {
 
 h6 {
   @apply text-sm font-bold;
+}
+
+.progress-ring__circle {
+  transition: stroke-dashoffset 0.5s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
 }

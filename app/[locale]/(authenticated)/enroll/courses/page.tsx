@@ -39,9 +39,8 @@ export default async function Page() {
 
   return (
     <>
-      <h1>Enroll</h1>
-      <Schedule slots={slots} timeRanges={timeRanges} schedule={schedule} />
       <RegisterCourseForm courses={eligibleCourses as any} />
+      <Schedule slots={slots} timeRanges={timeRanges} schedule={schedule} />
     </>
   );
 }

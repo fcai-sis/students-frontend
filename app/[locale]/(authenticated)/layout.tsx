@@ -12,7 +12,7 @@ export default async function Layout({
   return (
     <>
       <Navbar locale={locale} />
-      <div className="py-24 px-8">{children}</div>
+      <div className="py-28 px-16">{children}</div>
     </>
   );
 }

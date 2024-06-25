@@ -1,11 +1,40 @@
 import {
   GenderEnum,
+  GenderEnumType,
   NationalityEnum,
+  NationalityEnumType,
+  ProgramEnum,
   ReligionEnum,
+  ReligionEnumType,
   ScientificDivisionEnum,
 } from "@fcai-sis/shared-models";
+import { DummyDepartment, dummyDepartments } from "./departments";
 
-export const dummyStudents = [
+export type DummyStudent = {
+  address: string;
+  administration: string;
+  birthDay: number;
+  birthMonth: number;
+  birthPlace: string;
+  birthYear: number;
+  directorate: string;
+  educationType: string;
+  fullName: string;
+  gender: GenderEnumType;
+  governorateId: number;
+  nationalId: string;
+  nationality: NationalityEnumType;
+  phoneNumber: string;
+  religion: ReligionEnumType;
+  scientificDivision: string;
+  studentId: string;
+  gpa: number;
+  level: number;
+  major: DummyDepartment;
+  creditHours: number;
+}[];
+
+export const dummyStudents: DummyStudent = [
   {
     address: "٢٢ شارع عامر، الدقي، الجيزة",
     administration: "الدقي",
@@ -24,10 +53,18 @@ export const dummyStudents = [
     religion: ReligionEnum[0],
     scientificDivision: ScientificDivisionEnum[1],
     studentId: "20200645",
-    currentGpa: 3.5,
-    currentLevel: 1,
-    currentDepartment: "Information Systems",
-    completedCreditHours: 114,
+    gpa: 3.2,
+    level: 1,
+    major: {
+      name: {
+        en: "General",
+        ar: "عام",
+      },
+      program: ProgramEnum[0],
+      capacity: 100,
+      code: "GN",
+    },
+    creditHours: 16,
   },
   {
     address: "٣٣ جابر بن حيان الدقي، الجيزة",
@@ -47,9 +84,9 @@ export const dummyStudents = [
     religion: ReligionEnum[0],
     scientificDivision: ScientificDivisionEnum[1],
     studentId: "20200123",
-    currentGpa: 2.21,
-    currentLevel: 3,
-    currentDepartment: "Computer Science",
-    currentCreditHours: 45,
+    gpa: 3.2,
+    level: 1,
+    major: dummyDepartments[0],
+    creditHours: 80,
   },
 ] as const;

@@ -1,3 +1,4 @@
+import ChangeLanguageButton from "@/components/ChangeLanguageButton";
 import { ensureUnauthenticated } from "@/lib";
 
 export default async function Layout({
@@ -6,5 +7,10 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   await ensureUnauthenticated();
-  return <>{children}</>;
+  return (
+    <>
+      <ChangeLanguageButton />
+      {children}
+    </>
+  );
 }

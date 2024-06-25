@@ -1,7 +1,23 @@
-import { CourseTypeEnum } from "@fcai-sis/shared-models";
-import { dummyDepartments } from "./departments";
+import { CourseTypeEnum, CourseTypeEnumType } from "@fcai-sis/shared-models";
+import { DummyDepartment, dummyDepartments } from "./departments";
 
-export const dummyCourses = [
+export type DummyCourse = {
+  code: string;
+  name: {
+    en: string;
+    ar: string;
+  };
+  creditHours: number;
+  courseType: CourseTypeEnumType;
+  description: {
+    en: string;
+    ar: string;
+  };
+  departments?: DummyDepartment[];
+  groups?: string[];
+};
+
+export const dummyCourses: DummyCourse[] = [
   {
     code: "CS101",
     name: {
@@ -14,6 +30,7 @@ export const dummyCourses = [
       en: "This course introduces students to the field of computer science and programming.",
       ar: "يقدم هذا المقرر للطلاب مقدمة في مجال علم الحاسب والبرمجة.",
     },
+    groups: ["S1/S2", "S3/S4", "S5/S6", "S7/S8"],
   },
   {
     code: "CS102",
@@ -27,6 +44,7 @@ export const dummyCourses = [
       en: "This course introduces students to data structures and algorithms.",
       ar: "يقدم هذا المقرر للطلاب هياكل البيانات والخوارزميات.",
     },
+    groups: ["S1/S2", "S3/S4"],
   },
   {
     code: "CS103",

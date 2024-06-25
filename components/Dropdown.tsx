@@ -1,5 +1,6 @@
 "use client";
 
+import { Menu } from "iconoir-react";
 import { PropsWithChildren, useState } from "react";
 
 export type DropdownProps = PropsWithChildren<{
@@ -15,9 +16,10 @@ export default function Dropdown({ label, children }: DropdownProps) {
   return (
     <div className="relative">
       <button
-        className="p-2 rounded-lg cursor-pointer hover:bg-slate-200 transition-colors duration-300"
+        className="p-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors duration-300 flex gap-2"
         onClick={handleButtonClick}
       >
+        <Menu />
         {label}
       </button>
       <div

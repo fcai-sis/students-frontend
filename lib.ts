@@ -39,3 +39,10 @@ export function getCurrentPage(searchParams: { page: string }) {
   if (!page || page < 1) page = 1;
   return page;
 }
+
+export function tt(
+  locale: "en" | "ar",
+  { en, ar }: { en: string; ar: string }
+) {
+  return locale === "ar" ? ar : en;
+}

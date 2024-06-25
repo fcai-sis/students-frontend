@@ -9,7 +9,9 @@ import { z } from "zod";
 import { dummyEnrollInCourseAction } from "./actions";
 
 const enrollInCourseFormSchema = z.object({
-  courses: z.array(z.object({ course: z.string() })),
+  courses: z.array(
+    z.object({ course: z.string(), group: z.string().optional() })
+  ),
 });
 
 export type enrollInCourseFormValues = z.infer<typeof enrollInCourseFormSchema>;
@@ -30,7 +32,7 @@ export default function RegisterCourseForm({
   } = useForm<enrollInCourseFormValues>({
     resolver: zodResolver(enrollInCourseFormSchema),
     defaultValues: {
-      courses: [{ course: "" }],
+      courses: [],
     },
   });
 
@@ -92,6 +94,21 @@ export default function RegisterCourseForm({
             {errors.courses && errors.courses[index] && (
               <span>{errors.courses[index]?.message}</span>
             )}
+            <select
+              {...register(`courses.${index}.group` as const)}
+              defaultValue={field.group}
+            >
+              <option value="" disabled>
+                Select a group
+              </option>
+              {(courses as any)
+                .find((course: any) => course.code === selectedCourses[index])
+                ?.groups?.map((group: string) => (
+                  <option key={group} value={group}>
+                    {group}
+                  </option>
+                ))}
+            </select>
             <button
               type="button"
               onClick={() => {
@@ -105,7 +122,10 @@ export default function RegisterCourseForm({
             </button>
           </div>
         ))}
-        <button type="button" onClick={() => addCourse({ course: "" })}>
+        <button
+          type="button"
+          onClick={() => addCourse({ course: "", group: "" })}
+        >
           Add Course
         </button>
 

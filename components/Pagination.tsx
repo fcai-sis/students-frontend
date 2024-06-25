@@ -5,6 +5,7 @@ import {
   useCurrentLocale,
   useI18n,
 } from "@/locales/client";
+import { NavArrowLeft, NavArrowRight } from "iconoir-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
@@ -14,6 +15,7 @@ function _Pagination({
 }: Readonly<{
   totalPages: number;
 }>) {
+  const locale = useCurrentLocale();
   const t = useI18n();
   const router = useRouter();
   const pathname = usePathname();
@@ -35,23 +37,26 @@ function _Pagination({
   const nextPage = currentPage < totalPages ? currentPage + 1 : null;
 
   return (
-    <div>
+    <div className="flex items-center gap-2">
       {prevPage && (
         <button
-          className="btn"
+          className="p-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors duration-300 flex gap-2"
           onClick={() => {
             router.push(
               pathname + "?" + createQueryString("page", prevPage.toString())
             );
           }}
         >
+          {locale === "ar" ? <NavArrowRight /> : <NavArrowLeft />}
           {t("pagination.previous")}
         </button>
       )}
-      <span>{currentPage}</span>
+      <span className="p-2 bg-slate-100 rounded-lg w-10 h-10 flex justify-center items-center">
+        {currentPage.toLocaleString(locale === "ar" ? "ar-EG" : "en-US")}
+      </span>
       {nextPage && (
         <button
-          className="btn"
+          className="p-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors duration-300 flex gap-2"
           onClick={() => {
             router.push(
               pathname + "?" + createQueryString("page", nextPage.toString())
@@ -59,6 +64,7 @@ function _Pagination({
           }}
         >
           {t("pagination.next")}
+          {locale === "ar" ? <NavArrowLeft /> : <NavArrowRight />}
         </button>
       )}
     </div>

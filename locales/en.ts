@@ -44,6 +44,7 @@ export default {
     viewAllAnnouncements: "View All Announcements",
     serviceRequests: "Service Requests",
     viewAllServiceRequests: "View All Service Requests",
+    schedule: "My Schedule",
   },
   students: {
     title: "Students",

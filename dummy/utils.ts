@@ -20,3 +20,33 @@ export const fakeResponse = <T>(data: T): Promise<T> => {
     }, 500);
   });
 };
+
+export function localizedLevel(level: number) {
+  switch (level) {
+    case 1:
+      return {
+        en: "Freshman",
+        ar: "المستوى الأول",
+      };
+    case 2:
+      return {
+        en: "Sophomore",
+        ar: "المستوى الثاني",
+      };
+    case 3:
+      return {
+        en: "Junior",
+        ar: "المستوى الثالث",
+      };
+    case 4:
+      return {
+        en: "Senior",
+        ar: "المستوى الرابع",
+      };
+    default:
+      return {
+        en: "Unknown",
+        ar: "غير معروف",
+      };
+  }
+}

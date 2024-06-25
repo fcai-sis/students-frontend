@@ -1,5 +1,6 @@
 "use client";
 
+import { Language } from "iconoir-react";
 import { useChangeLocale, useCurrentLocale } from "../locales/client";
 
 export default function ChangeLanguageButton() {
@@ -7,14 +8,15 @@ export default function ChangeLanguageButton() {
   const locale = useCurrentLocale();
 
   const to = locale === "ar" ? "en" : "ar";
-  const position = locale === "ar" ? "left-6 bottom-6" : "right-6 bottom-6";
 
   return (
-    <button
-      onClick={() => changeLocale(to)}
-      className={`rounded-lg cursor-pointer bg-slate-100 hover:bg-slate-200 transition-colors duration-300 p-4 shadow-md fixed ${position}`}
-    >
-      {locale === "ar" ? "English" : "العربية"}
-    </button>
+    <>
+      <button
+        onClick={() => changeLocale(to)}
+        className={`rounded-lg cursor-pointer bg-white hover:bg-slate-100 transition-colors duration-300 p-2 flex gap-2 items-center justify-center`}
+      >
+        <Language />
+      </button>
+    </>
   );
 }

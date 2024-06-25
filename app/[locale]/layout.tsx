@@ -2,7 +2,6 @@ import Locale from "intl-locale-textinfo-polyfill";
 import { Rubik } from "next/font/google";
 import "../globals.css";
 import { Toaster } from "react-hot-toast";
-import ChangeLanguageButton from "@/components/ChangeLanguageButton";
 import { Metadata } from "next";
 
 const rubik = Rubik({ subsets: ["latin", "arabic"] });
@@ -24,7 +23,6 @@ export default function RootLayout({
     <html lang={locale} dir={dir}>
       <body className={`${rubik.className}`}>
         {children}
-        <ChangeLanguageButton />
         <Toaster position="top-right" />
       </body>
     </html>

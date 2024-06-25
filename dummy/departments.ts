@@ -1,6 +1,16 @@
-import { ProgramEnum } from "@fcai-sis/shared-models";
+import { ProgramEnum, ProgramEnumType } from "@fcai-sis/shared-models";
 
-export const dummyDepartments = [
+export type DummyDepartment = {
+  capacity: number;
+  code: string;
+  name: {
+    en: string;
+    ar: string;
+  };
+  program: ProgramEnumType;
+};
+
+export const dummyDepartments: DummyDepartment[] = [
   {
     capacity: 100,
     code: "CS",

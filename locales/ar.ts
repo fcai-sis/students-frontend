@@ -45,6 +45,7 @@ export default {
     viewAllAnnouncements: "عرض جميع الإعلانات",
     serviceRequests: "طلبات الخدمة",
     viewAllServiceRequests: "عرض جميع طلبات الخدمة",
+    schedule: "جدولي",
   },
   students: {
     title: "الطلاب",
