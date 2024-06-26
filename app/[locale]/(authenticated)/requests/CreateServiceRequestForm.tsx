@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { createServiceRequest, dummyCreateServiceRequest } from "./actions";
+import { createServiceRequest } from "./actions";
 import { useRouter } from "next/navigation";
 
 const createServiceRequestSchema = z.object({
@@ -37,7 +37,7 @@ export default function CreateServiceRequestForm() {
     const formData = new FormData();
     formData.append("serviceName", data.serviceName);
     formData.append("image", data.image[0]);
-    const response = await dummyCreateServiceRequest(formData);
+    const response = await createServiceRequest(formData);
 
     if (!response.success) {
       return toast.error(JSON.stringify(response));
@@ -50,12 +50,12 @@ export default function CreateServiceRequestForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input
-        type="text"
-        placeholder="Service Name"
+        type='text'
+        placeholder='Service Name'
         {...register("serviceName")}
       />
-      <input type="file" accept="image/jpeg" {...register("image")} />
-      <button type="submit" disabled={isSubmitting} className="btn">
+      <input type='file' accept='image/jpeg' {...register("image")} />
+      <button type='submit' disabled={isSubmitting} className='btn'>
         {isSubmitting ? "Submitting..." : "Submit"}
       </button>
     </form>

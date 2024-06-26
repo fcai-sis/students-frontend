@@ -3,11 +3,10 @@
 import Pagination from "@/components/Pagination";
 import ServiceRequestCard from "@/components/ServiceRequestCard";
 import { SelectFilter } from "@/components/SetQueryFilter";
-import { dummyServiceRequests } from "@/dummy/serviceRequests";
-import { fakeResponse } from "@/dummy/utils";
 import { getCurrentPage } from "@/lib";
 import { ServiceRequestStatusEnum } from "@fcai-sis/shared-models";
 import Link from "next/link";
+import { getStudentServiceRequests } from "./actions";
 
 export default async function Page({
   searchParams,
@@ -17,25 +16,20 @@ export default async function Page({
   const page = getCurrentPage(searchParams);
   const limit = 2;
 
-  const _filtered = dummyServiceRequests.filter((serviceRequest) => {
+  const getStudentServiceRequestResponse = await getStudentServiceRequests();
+  const studentServiceRequests =
+    getStudentServiceRequestResponse.data?.studentServiceRequests;
+  const totalRequests =
+    getStudentServiceRequestResponse.data?.totalServiceRequests;
+
+  const _filtered = studentServiceRequests.filter((serviceRequest: any) => {
     if (searchParams.status) {
       return serviceRequest.status === searchParams.status;
     }
     return true;
   });
-  const _total = _filtered.length;
 
   const _paginated = _filtered.slice((page - 1) * limit, page * limit);
-
-  const { data } = await fakeResponse({
-    status: 200,
-    data: {
-      serviceRequests: _paginated,
-      total: _total,
-    },
-  });
-
-  const { serviceRequests, total } = data;
 
   const statusOptions = [
     { label: "All", value: "" },
@@ -48,14 +42,14 @@ export default async function Page({
   return (
     <>
       <h1>Service Requests</h1>
-      <Link href="/requests/create">Create Service Request</Link>
-      <SelectFilter name="status" options={statusOptions} />
+      <Link href='/requests/create'>Create Service Request</Link>
+      <SelectFilter name='status' options={statusOptions} />
       <div>
-        {serviceRequests.map((serviceRequest: any, i: number) => (
+        {_paginated.map((serviceRequest: any, i: number) => (
           <ServiceRequestCard key={i} serviceRequest={serviceRequest} />
         ))}
       </div>
-      <Pagination totalPages={total / limit} />
+      <Pagination totalPages={totalRequests / limit} />
     </>
   );
 }
