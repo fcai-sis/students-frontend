@@ -6,6 +6,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import toast from "react-hot-toast";
+import { submitDepartmentPreferenceAction } from "./actions";
 
 const departmentPreferenceFormSchema = z.object({
   preferences: z.array(
@@ -50,8 +51,17 @@ export default function DepartmentPreferenceForm({
   };
 
   const onSubmit = async (values: DepartmentPreferenceFormValues) => {
-    console.log(values);
-    toast.success("Preferences Updated Successfully");
+    const submitDepartmentPreferenceResponse =
+      await submitDepartmentPreferenceAction(values);
+
+    if (!submitDepartmentPreferenceResponse.success) {
+      return toast.error(
+        submitDepartmentPreferenceResponse.error?.message ??
+          "Failed to submit department preferences"
+      );
+    }
+
+    toast.success("Department preferences submitted successfully");
     router.push(`/`);
   };
 
@@ -60,7 +70,7 @@ export default function DepartmentPreferenceForm({
       <h1>Department Preference Form</h1>
       <DragDropContext onDragEnd={handleDrag}>
         <ul>
-          <Droppable droppableId="preferences-items">
+          <Droppable droppableId='preferences-items'>
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
                 {fields.map((field, index) => (
@@ -74,17 +84,17 @@ export default function DepartmentPreferenceForm({
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}
-                        className="bg-gray-100 p-2 mb-2"
+                        className='bg-gray-100 p-2 mb-2'
                       >
                         <input
-                          type="hidden"
+                          type='hidden'
                           {...register(`preferences.${index}.code` as const)}
                           value={field.code}
                         />
                         {
                           departments.find(
                             (department) => department.code === field.code
-                          )?.name.ar
+                          )?.name.en
                         }
                       </li>
                     )}
@@ -96,8 +106,8 @@ export default function DepartmentPreferenceForm({
           </Droppable>
         </ul>
       </DragDropContext>
-      <button className="btn" type="submit">
-        Submit
+      <button className='btn' type='submit' disabled={isSubmitting}>
+        {isSubmitting ? "Submitting" : "Submit"}
       </button>
     </form>
   );
