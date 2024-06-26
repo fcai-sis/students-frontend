@@ -28,6 +28,8 @@ export async function createServiceRequest(data: FormData) {
     };
   }
 
+  revalidatePath("/requests");
+
   return { success: true };
 }
 
@@ -75,32 +77,3 @@ export async function dummyCreateServiceRequest(data: FormData) {
 
   return { success: true };
 }
-
-export const getStudentServiceRequests = async () => {
-  const accessToken = await getAccessToken();
-
-  const response = await serviceRequestsAPI.get(`/mine`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (response.status !== 200) {
-    return {
-      success: false,
-      error: {
-        message: response.data.error.message,
-      },
-    };
-  }
-
-  revalidatePath("/requests");
-
-  return {
-    success: true,
-    data: {
-      studentServiceRequests: response.data.serviceRequests,
-      totalServiceRequests: response.data.totalServiceRequests,
-    },
-  };
-};

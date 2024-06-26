@@ -1,3 +1,7 @@
+import {
+  AnnouncementSeveritiesEnum,
+  AnnouncementSeverityEnumType,
+} from "@fcai-sis/shared-models";
 import mongoose from "mongoose";
 
 export type DummyDocument<T> = T & { _id: mongoose.Schema.Types.ObjectId };
@@ -42,6 +46,31 @@ export function localizedLevel(level: number) {
       return {
         en: "Senior",
         ar: "المستوى الرابع",
+      };
+    default:
+      return {
+        en: "Unknown",
+        ar: "غير معروف",
+      };
+  }
+}
+
+export function localizedSeverity(severity: AnnouncementSeverityEnumType) {
+  switch (severity) {
+    case AnnouncementSeveritiesEnum[0]:
+      return {
+        en: "Info",
+        ar: "معلومة",
+      };
+    case AnnouncementSeveritiesEnum[1]:
+      return {
+        en: "Warning",
+        ar: "تحذير",
+      };
+    case AnnouncementSeveritiesEnum[2]:
+      return {
+        en: "Critical",
+        ar: "حرج",
       };
     default:
       return {

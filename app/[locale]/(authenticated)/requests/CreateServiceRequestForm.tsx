@@ -49,13 +49,26 @@ export default function CreateServiceRequestForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <label className="block text-sm font-medium text-gray-700">
+        Service Name
+      </label>
       <input
-        type='text'
-        placeholder='Service Name'
+        type="text"
+        placeholder="Service Name"
         {...register("serviceName")}
       />
-      <input type='file' accept='image/jpeg' {...register("image")} />
-      <button type='submit' disabled={isSubmitting} className='btn'>
+      <div className="mt-4">
+        <label className="block text-sm font-medium text-gray-700">Image</label>
+        <div className="mt-1 flex items-center">
+          <input
+            type="file"
+            accept="image/jpeg"
+            {...register("image")}
+            className="bg-transparent p-2"
+          />
+        </div>
+      </div>
+      <button type="submit" disabled={isSubmitting} className="btn">
         {isSubmitting ? "Submitting..." : "Submit"}
       </button>
     </form>

@@ -1,69 +1,67 @@
 import AnnouncementCard from "@/components/AnnouncementCard";
 import { getCurrentLocale, getI18n } from "@/locales/server";
 import Pagination from "@/components/Pagination";
-import { fakeResponse, localizedLevel } from "@/dummy/utils";
-import { getCurrentPage, tt } from "@/lib";
+import { localizedLevel, localizedSeverity } from "@/dummy/utils";
+import { getCurrentPage, limit, tt } from "@/lib";
 import { SelectFilter } from "@/components/SetQueryFilter";
-import { dummyAnnouncements } from "@/dummy/announcements";
-import { dummyDepartments } from "@/dummy/departments";
+import { announcementsAPI, departmentsAPI } from "@/api";
+import { AnnouncementSeveritiesEnum } from "@fcai-sis/shared-models";
+
+export const getDepartments = async () => {
+  const response = await departmentsAPI.get("/");
+  if (response.status !== 200) throw new Error("Failed to fetch departments");
+  return response.data;
+};
+
+export const getAnnouncements = async (
+  page: number,
+  department?: string,
+  level?: number,
+  severity?: string
+) => {
+  const repsonse = await announcementsAPI.get<{
+    announcements: any[];
+    total: number;
+  }>("/", {
+    params: {
+      page,
+      department,
+      level,
+      severity,
+    },
+  });
+
+  if (repsonse.status !== 200) throw new Error("Failed to fetch announcements");
+
+  return repsonse.data;
+};
 
 export default async function Page({
   searchParams,
 }: Readonly<{
-  searchParams: { page: string; department: string; level: string };
+  searchParams: {
+    page: string;
+    department: string;
+    level: string;
+    severity: string;
+  };
 }>) {
   const locale = getCurrentLocale();
   const t = await getI18n();
 
-  const _filtered = dummyAnnouncements.filter((announcement) => {
-    const selectedDepartment = searchParams.department;
-    const selectedLevel = searchParams.level;
-    const departmentMatch =
-      !selectedDepartment ||
-      !announcement.departments ||
-      announcement.departments.length === 0 ||
-      announcement.departments.some(
-        (department) => department.code === selectedDepartment
-      );
-
-    // Check if the announcement should be matched for the selected level
-    const levelMatch =
-      !selectedLevel ||
-      !announcement.levels ||
-      announcement.levels.length === 0 ||
-      announcement.levels.some((level) => level === parseInt(selectedLevel));
-
-    // Return true if both department and level match the criteria
-    return departmentMatch && levelMatch;
-  });
-
-  const _total = _filtered.length;
-
   const page = getCurrentPage(searchParams);
-  const limit = 2;
+  const department = searchParams.department;
+  const level = parseInt(searchParams.level);
+  const severity = searchParams.severity;
 
-  const _paginated = _filtered.slice((page - 1) * limit, page * limit);
+  const { announcements, total } = await getAnnouncements(
+    page,
+    department,
+    level,
+    severity
+  );
 
-  const { data: announcementData } = await fakeResponse({
-    status: 200,
-    data: {
-      announcements: _paginated,
-      total: _total,
-    },
-  });
-
-  const { announcements, total } = announcementData;
-
-  const _departments = dummyDepartments;
-
-  const { data: departmentData } = await fakeResponse({
-    status: 200,
-    data: {
-      departments: _departments,
-    },
-  });
-
-  const { departments } = departmentData;
+  const { departments } = await getDepartments();
 
   const departmentOptions = [
     {
@@ -87,22 +85,24 @@ export default async function Page({
       }),
       value: "",
     },
+    ...[1, 2, 3, 4].map((level) => ({
+      label: tt(locale, localizedLevel(level)),
+      value: level.toString(),
+    })),
+  ];
+
+  const severityOptions = [
     {
-      label: tt(locale, localizedLevel(1)),
-      value: "1",
+      label: tt(locale, {
+        en: "All Severities",
+        ar: "جميع الخطورات",
+      }),
+      value: "",
     },
-    {
-      label: tt(locale, localizedLevel(2)),
-      value: "2",
-    },
-    {
-      label: tt(locale, localizedLevel(3)),
-      value: "3",
-    },
-    {
-      label: tt(locale, localizedLevel(4)),
-      value: "4",
-    },
+    ...AnnouncementSeveritiesEnum.map((severity, index) => ({
+      label: tt(locale, localizedSeverity(severity)),
+      value: AnnouncementSeveritiesEnum[index],
+    })),
   ];
 
   return (
@@ -126,6 +126,15 @@ export default async function Page({
             })}
           </label>
           <SelectFilter name="level" options={levelOptions} />
+        </div>
+        <div className="flex gap-2 items-center">
+          <label htmlFor="severity" className="">
+            {tt(locale, {
+              en: "Filter by severity:",
+              ar: "حسب الخطورة:",
+            })}
+          </label>
+          <SelectFilter name="severity" options={severityOptions} />
         </div>
       </div>
       <div>

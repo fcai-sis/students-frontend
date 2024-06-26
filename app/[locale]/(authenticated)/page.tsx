@@ -2,15 +2,15 @@ import AnnouncementCard from "@/components/AnnouncementCard";
 import RadialProgress from "@/components/RadialProgress";
 import Schedule from "@/components/Schedule";
 import ServiceRequestCard from "@/components/ServiceRequestCard";
-import { dummyAnnouncements } from "@/dummy/announcements";
 import { dummyCourses } from "@/dummy/courses";
 import dummySchedule from "@/dummy/schedule";
-import { dummyServiceRequests } from "@/dummy/serviceRequests";
 import { dummySlotsByDay, dummyTimeRanges } from "@/dummy/slots";
 import { dummyStudents } from "@/dummy/students";
 import { fakeResponse, localizedLevel } from "@/dummy/utils";
 import { tt } from "@/lib";
 import { getCurrentLocale, getI18n } from "@/locales/server";
+import { getStudentServiceRequests } from "./requests/page";
+import { getAnnouncements } from "./announcements/page";
 
 export default async function Page() {
   const t = await getI18n();
@@ -30,23 +30,8 @@ export default async function Page() {
 
   const { student } = getMeResponse.data;
 
-  const { data: announcementData } = await fakeResponse({
-    status: 200,
-    data: {
-      announcements: dummyAnnouncements.slice(0, 3),
-    },
-  });
-
-  const { announcements } = announcementData;
-
-  const { data } = await fakeResponse({
-    status: 200,
-    data: {
-      serviceRequests: dummyServiceRequests.slice(0, 3),
-    },
-  });
-
-  const { serviceRequests } = data;
+  const { announcements } = await getAnnouncements(1);
+  const { serviceRequests } = await getStudentServiceRequests(1);
 
   const _eligibleCourses = dummyCourses;
   const _schedule = dummySchedule;

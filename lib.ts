@@ -46,3 +46,8 @@ export function tt(
 ) {
   return locale === "ar" ? ar : en;
 }
+
+/**
+ * The number of items to show per page.
+ */
+export const limit = 10;
