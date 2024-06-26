@@ -1,51 +1,62 @@
+import { departmentsAPI, instructorTaAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import { SelectFilter } from "@/components/SetQueryFilter";
-import { dummyDepartments } from "@/dummy/departments";
-import { dummyInstructors } from "@/dummy/instructors";
-import { fakeResponse } from "@/dummy/utils";
-import { getCurrentPage } from "@/lib";
+import { getAccessToken, getCurrentPage, limit } from "@/lib";
+import { DepartmentType } from "@fcai-sis/shared-models";
+import { revalidatePath } from "next/cache";
 
+export const getInstructors = async (
+  page: number,
+  department: DepartmentType
+) => {
+  const accessToken = await getAccessToken();
+  const response = await instructorTaAPI.get(`/instructors/read`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    params: {
+      skip: page * limit - limit, // huh
+      limit,
+      department,
+    },
+  });
+
+  if (response.status !== 200) throw new Error("Failed to fetch instructors");
+
+  revalidatePath("/instructors");
+
+  return response.data;
+};
+
+export const getDepartments = async () => {
+  const accessToken = await getAccessToken();
+  const response = await departmentsAPI.get(`/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (response.status !== 200) throw new Error("Failed to fetch departments");
+
+  revalidatePath("/department");
+
+  return response.data;
+};
 
 export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string; department: string } }>) {
   const page = getCurrentPage(searchParams);
-  const limit = 5;
 
-  const _filtered = dummyInstructors.filter((instructor: any) => {
-    if (!searchParams.department || searchParams.department === "") return true;
-    if (
-      instructor.department.code === searchParams.department
-    )
-      return true;
-    return false;
-  }
-  );
+  const departmentSelected =
+    searchParams.department as unknown as DepartmentType;
 
-  const _total = _filtered.length;
+  const response = await getInstructors(page, departmentSelected);
+  const instructors = response.instructors;
+  const total = response.totalInstructors;
 
-  const _paginated = _filtered.slice((page - 1) * limit, page * limit);
-
-  const { data: instructorsData } = await fakeResponse({
-    status: 200,
-    data: {
-      instructors: _paginated,
-      total: _total,
-    },
-  });
-
-  const { instructors, total } = instructorsData;
-
-  const _departments = dummyDepartments;
-
-  const { data: departmentData } = await fakeResponse({
-    status: 200,
-    data: {
-      departments: _departments,
-    },
-  });
-
-  const { departments } = departmentData;
+  const departmentResponse = await getDepartments();
+  const departments = departmentResponse.departments;
 
   const departmentOptions = [
     {
@@ -62,23 +73,23 @@ export default async function Page({
     <>
       <div>
         <h1>Instructors</h1>
-        <SelectFilter name="department" options={departmentOptions} />
+        <SelectFilter name='department' options={departmentOptions} />
         <div>
           {instructors.map((instructor: any) => (
-            <div className="border border-black w-80">
-            <p>
-              <b>Name: </b>
-              {instructor.name}
-            </p>
-            <p>
-              <b>Email: </b>
-              {instructor.email}
-            </p>
-            <p>
-              <b>Department: </b>
-              {instructor.department.name.en}
-            </p>
-            {instructor.officeHours && (
+            <div className='border border-black w-80'>
+              <p>
+                <b>Name: </b>
+                {instructor.fullName}
+              </p>
+              <p>
+                <b>Email: </b>
+                {instructor.email}
+              </p>
+              <p>
+                <b>Department: </b>
+                {instructor.department.name.en}
+              </p>
+              {instructor.officeHours && (
                 <p>
                   <b>Office Hours: </b>
                   {instructor.officeHours}

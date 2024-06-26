@@ -1,51 +1,61 @@
+import { departmentsAPI, instructorTaAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import { SelectFilter } from "@/components/SetQueryFilter";
-import { dummyDepartments } from "@/dummy/departments";
-import { dummyTeacherAssistants } from "@/dummy/teacherAssistants";
-import { fakeResponse } from "@/dummy/utils";
-import { getCurrentPage } from "@/lib";
+import { getAccessToken, getCurrentPage, limit } from "@/lib";
+import { DepartmentType } from "@fcai-sis/shared-models";
+import { revalidatePath } from "next/cache";
 
+export const getTeachingAssistants = async (
+  page: number,
+  department: DepartmentType
+) => {
+  const accessToken = await getAccessToken();
+  const response = await instructorTaAPI.get(`/teacherAssistants/read`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    params: {
+      skip: page * limit - limit,
+      limit,
+      department,
+    },
+  });
+
+  if (response.status !== 200)
+    throw new Error("Failed to fetch teaching assistants");
+
+  revalidatePath("/ta");
+
+  return response.data;
+};
+
+export const getDepartments = async () => {
+  const accessToken = await getAccessToken();
+  const response = await departmentsAPI.get(`/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (response.status !== 200) throw new Error("Failed to fetch departments");
+
+  revalidatePath("/department");
+
+  return response.data;
+};
 
 export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string; department: string } }>) {
   const page = getCurrentPage(searchParams);
-  const limit = 5;
+  const departmentSelected =
+    searchParams.department as unknown as DepartmentType;
 
-  const _filtered = dummyTeacherAssistants.filter((ta: any) => {
-    if (!searchParams.department || searchParams.department === "") return true;
-    if (
-      ta.department.code === searchParams.department
-    )
-      return true;
-    return false;
-  }
-  );
+  const response = await getTeachingAssistants(page, departmentSelected);
+  const teachingAssistants = response.teachingAssistants;
+  const total = response.totalTeachingAssistants;
 
-  const _total = _filtered.length;
-
-  const _paginated = _filtered.slice((page - 1) * limit, page * limit);
-
-  const { data: tasData } = await fakeResponse({
-    status: 200,
-    data: {
-      tas: _paginated,
-      total: _total,
-    },
-  });
-
-  const { tas, total } = tasData;
-
-  const _departments = dummyDepartments;
-
-  const { data: departmentData } = await fakeResponse({
-    status: 200,
-    data: {
-      departments: _departments,
-    },
-  });
-
-  const { departments } = departmentData;
+  const departments = await getDepartments();
 
   const departmentOptions = [
     {
@@ -61,24 +71,24 @@ export default async function Page({
   return (
     <>
       <div>
-        <h1>teacher Assistants</h1>
-        <SelectFilter name="department" options={departmentOptions} />
+        <h1>Teaching Assistants</h1>
+        <SelectFilter name='department' options={departmentOptions} />
         <div>
-          {tas.map((ta: any) => (
-            <div className="border border-black w-80">
-            <p>
-              <b>Name: </b>
-              {ta.name}
-            </p>
-            <p>
-              <b>Email: </b>
-              {ta.email}
-            </p>
-            <p>
-              <b>Department: </b>
-              {ta.department.name.en}
-            </p>
-            {ta.officeHours && (
+          {teachingAssistants.map((ta: any) => (
+            <div className='border border-black w-80'>
+              <p>
+                <b>Name: </b>
+                {ta.fullName}
+              </p>
+              <p>
+                <b>Email: </b>
+                {ta.email}
+              </p>
+              <p>
+                <b>Department: </b>
+                {ta.department.name.en}
+              </p>
+              {ta.officeHours && (
                 <p>
                   <b>Office Hours: </b>
                   {ta.officeHours}
