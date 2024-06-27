@@ -1,9 +1,6 @@
 import { coursesAPI, departmentsAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import { SelectFilter } from "@/components/SetQueryFilter";
-import { dummyCourses } from "@/dummy/courses";
-import { dummyDepartments } from "@/dummy/departments";
-import { fakeResponse } from "@/dummy/utils";
 import { getAccessToken, getCurrentPage, limit } from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
@@ -19,6 +16,7 @@ export const getCourses = async (page: number, department: DepartmentType) => {
     params: {
       skip: page * limit - limit,
       limit,
+      department,
     },
   });
 
@@ -55,20 +53,6 @@ export default async function Page({
   const courses = response.courses;
   const total = response.totalCourses;
   console.log(courses);
-
-  const _filtered = dummyCourses.filter((course: any) => {
-    if (!searchParams.department || searchParams.department === "") return true;
-    if (
-      course.departments
-        ?.map((d: any) => d.code)
-        .includes(searchParams.department)
-    )
-      return true;
-    return false;
-  });
-  const _total = _filtered.length;
-
-  const _paginated = _filtered.slice((page - 1) * limit, page * limit);
 
   const departmentResponse = await getDepartments();
   const departments = departmentResponse.departments;
