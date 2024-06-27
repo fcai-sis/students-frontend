@@ -1,16 +1,60 @@
+import { coursesAPI, departmentsAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import { SelectFilter } from "@/components/SetQueryFilter";
 import { dummyCourses } from "@/dummy/courses";
 import { dummyDepartments } from "@/dummy/departments";
 import { fakeResponse } from "@/dummy/utils";
-import { getCurrentPage } from "@/lib";
+import { getAccessToken, getCurrentPage, limit } from "@/lib";
+import { DepartmentType } from "@fcai-sis/shared-models";
+import { revalidatePath } from "next/cache";
 import Link from "next/link";
+
+export const getCourses = async (page: number, department: DepartmentType) => {
+  const accessToken = await getAccessToken();
+
+  const response = await coursesAPI.get(`/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    params: {
+      skip: page * limit - limit,
+      limit,
+    },
+  });
+
+  if (response.status !== 200) throw new Error("Failed to fetch courses");
+
+  revalidatePath("/courses");
+
+  return response.data;
+};
+
+export const getDepartments = async () => {
+  const accessToken = await getAccessToken();
+  const response = await departmentsAPI.get(`/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (response.status !== 200) throw new Error("Failed to fetch departments");
+
+  revalidatePath("/department");
+
+  return response.data;
+};
 
 export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string; department: string } }>) {
   const page = getCurrentPage(searchParams);
-  const limit = 5;
+  const departmentSelected =
+    searchParams.department as unknown as DepartmentType;
+
+  const response = await getCourses(page, departmentSelected);
+  const courses = response.courses;
+  const total = response.totalCourses;
+  console.log(courses);
 
   const _filtered = dummyCourses.filter((course: any) => {
     if (!searchParams.department || searchParams.department === "") return true;
@@ -26,26 +70,8 @@ export default async function Page({
 
   const _paginated = _filtered.slice((page - 1) * limit, page * limit);
 
-  const { data: coursesData } = await fakeResponse({
-    status: 200,
-    data: {
-      courses: _paginated,
-      total: _total,
-    },
-  });
-
-  const { courses, total } = coursesData;
-
-  const _departments = dummyDepartments;
-
-  const { data: departmentData } = await fakeResponse({
-    status: 200,
-    data: {
-      departments: _departments,
-    },
-  });
-
-  const { departments } = departmentData;
+  const departmentResponse = await getDepartments();
+  const departments = departmentResponse.departments;
 
   const departmentOptions = [
     {
@@ -61,10 +87,10 @@ export default async function Page({
   return (
     <>
       <h1>Courses</h1>
-      <SelectFilter name="department" options={departmentOptions} />
+      <SelectFilter name='department' options={departmentOptions} />
       <div>
         {courses.map((course: any) => (
-          <div className="border border-black w-80">
+          <div className='border border-black w-80'>
             <p>
               <b>Code: </b>
               {course.code}
