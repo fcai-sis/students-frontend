@@ -6,7 +6,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import { dummyEnrollInCourseAction } from "./actions";
+import { dummyEnrollInCourseAction, enrollInCourseAction } from "./actions";
 
 const enrollInCourseFormSchema = z.object({
   courses: z.array(
@@ -52,7 +52,7 @@ export default function RegisterCourseForm({
   };
 
   const onSubmit = async (values: enrollInCourseFormValues) => {
-    const enrollInCourseResponse = await dummyEnrollInCourseAction(values);
+    const enrollInCourseResponse = await enrollInCourseAction(values);
 
     if (!enrollInCourseResponse.success) {
       return toast.error(
@@ -76,7 +76,7 @@ export default function RegisterCourseForm({
               defaultValue={field.course}
               onChange={(e) => handleCourseChange(index, e.target.value)}
             >
-              <option value="" disabled>
+              <option value='' disabled>
                 Select a course
               </option>
               {courses
@@ -98,7 +98,7 @@ export default function RegisterCourseForm({
               {...register(`courses.${index}.group` as const)}
               defaultValue={field.group}
             >
-              <option value="" disabled>
+              <option value='' disabled>
                 Select a group
               </option>
               {(courses as any)
@@ -110,7 +110,7 @@ export default function RegisterCourseForm({
                 ))}
             </select>
             <button
-              type="button"
+              type='button'
               onClick={() => {
                 removeCourse(index);
                 const newSelectedCourses = [...selectedCourses];
@@ -123,13 +123,13 @@ export default function RegisterCourseForm({
           </div>
         ))}
         <button
-          type="button"
+          type='button'
           onClick={() => addCourse({ course: "", group: "" })}
         >
           Add Course
         </button>
 
-        <button className="btn" type="submit" disabled={isSubmitting}>
+        <button className='btn' type='submit' disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
         </button>
       </form>

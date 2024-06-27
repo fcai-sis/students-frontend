@@ -1,21 +1,37 @@
-import { dummyCourses } from "@/dummy/courses";
 import dummySchedule from "@/dummy/schedule";
 import { dummySlotsByDay, dummyTimeRanges } from "@/dummy/slots";
 import { fakeResponse } from "@/dummy/utils";
 import RegisterCourseForm from "./RegisterCourseForm";
 import Schedule from "@/components/Schedule";
+import { getAccessToken } from "@/lib";
+import { enrollmentsAPI } from "@/api";
+import { revalidatePath } from "next/cache";
 
-export default async function Page() {
-  const _eligibleCourses = dummyCourses;
-  const _schedule = dummySchedule;
+export const getEligibleEnrollments = async () => {
+  const accessToken = await getAccessToken();
 
-  const { data: eligibleCoursesData } = await fakeResponse({
-    status: 200,
-    data: {
-      eligibleCourses: _eligibleCourses,
+  const response = await enrollmentsAPI.get(`/eligible`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
     },
   });
-  const { eligibleCourses } = eligibleCoursesData;
+
+  if (response.status !== 200) throw new Error("Failed to fetch enrollments");
+
+  revalidatePath("/enroll");
+
+  return response.data;
+};
+
+export default async function Page() {
+  const response = await getEligibleEnrollments();
+  const enrollments = response.courses;
+  const eligibleCourses = enrollments.map(
+    (enrollment: any) => enrollment.course
+  );
+  console.log(eligibleCourses);
+
+  const _schedule = dummySchedule;
 
   const { data: scheduleData } = await fakeResponse({
     status: 200,
