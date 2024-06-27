@@ -1,21 +1,30 @@
-import { dummyCourses } from "@/dummy/courses";
-import { fakeResponse } from "@/dummy/utils";
+import { coursesAPI } from "@/api";
+import { getAccessToken } from "@/lib";
+import { revalidatePath } from "next/cache";
+
+export const getSelectedCourse = async (code: string) => {
+  const accessToken = await getAccessToken();
+
+  const response = await coursesAPI.get(`/${code}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (response.status !== 200) throw new Error("Failed to fetch course");
+
+  revalidatePath("/courses");
+
+  return response.data;
+};
 
 export default async function Page({
   params: { code },
 }: Readonly<{
   params: { code: string };
 }>) {
-  const _course = dummyCourses[0];
-  const { data } = await fakeResponse({
-    status: 200,
-    data: {
-      course: _course,
-    },
-  });
-
-  const { course } = data;
-
+  const response = await getSelectedCourse(code);
+  const course = response.course;
   return (
     <>
       <h1>{course.name.en}</h1>
