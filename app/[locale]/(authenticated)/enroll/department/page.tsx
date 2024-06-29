@@ -23,12 +23,15 @@ export const getDepartments = async () => {
 export default async function Page() {
   const response = await getDepartments();
   const departments = response.departments;
+  const filteredDepartments = departments.filter(
+    (department: DepartmentType) => department.program === "SPECIALIZATION"
+  );
 
   return (
     <>
       <I18nProviderClient locale='en'>
         <DepartmentPreferenceForm
-          departments={departments as DepartmentType[]}
+          departments={filteredDepartments as DepartmentType[]}
         />
       </I18nProviderClient>
     </>
