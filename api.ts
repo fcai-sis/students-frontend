@@ -49,3 +49,7 @@ export const departmentEnrollmentAPI = axios.create({
   validateStatus: (status) => status < 500,
 });
 
+export const courseEvaluationAPI = axios.create({
+  baseURL: process.env.COURSE_EVALUATION_API_URL,
+  validateStatus: (status) => status < 500,
+});

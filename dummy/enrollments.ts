@@ -6,6 +6,7 @@ import { dummyHalls } from "./halls";
 
 export const dummyEnrollments = [
   {
+    _id: "667f083078bb2ef8d03fa33a",
     student: dummyStudents[0],
     semester: dummySemesters[0],
     course: dummyCourses[0],
@@ -21,6 +22,7 @@ export const dummyEnrollments = [
     mark: "A",
   },
   {
+    _id: "667f083078bb2ef8d03fa33a",
     student: dummyStudents[1],
     semester: dummySemesters[0],
     course: dummyCourses[1],
@@ -36,6 +38,7 @@ export const dummyEnrollments = [
     mark: "B",
   },
   {
+    _id: "667f083078bb2ef8d03fa33a",
     student: dummyStudents[1],
     semester: dummySemesters[0],
     course: dummyCourses[2],
@@ -51,6 +54,7 @@ export const dummyEnrollments = [
     mark: "C",
   },
   {
+    _id: "667f083078bb2ef8d03fa33a",
     student: dummyStudents[1],
     semester: dummySemesters[0],
     course: dummyCourses[3],
@@ -66,6 +70,7 @@ export const dummyEnrollments = [
     mark: "D",
   },
   {
+    _id: "667f083078bb2ef8d03fa33a",
     student: dummyStudents[0],
     semester: dummySemesters[0],
     course: dummyCourses[4],

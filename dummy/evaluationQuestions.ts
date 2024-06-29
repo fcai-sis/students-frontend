@@ -5,6 +5,7 @@ export const DummyEvaluationQuestionEnum = [
 ] as const;
 export const dummyEvaluationQuestions = [
   {
+    questionId: "667f083078bb2ef8d03fa33a",
     type: DummyEvaluationQuestionEnum[0],
     question: {
       en: "The course was well-structured",
@@ -12,6 +13,7 @@ export const dummyEvaluationQuestions = [
     },
   },
   {
+    questionId: "667f083078bb2ef8d03fa33a",
     type: DummyEvaluationQuestionEnum[1],
     question: {
       en: "The instructor was knowledgeable",
@@ -19,6 +21,7 @@ export const dummyEvaluationQuestions = [
     },
   },
   {
+    questionId: "667f083078bb2ef8d03fa33a",
     type: DummyEvaluationQuestionEnum[2],
     question: {
       en: "The TA was helpful",

@@ -29,7 +29,7 @@ export default async function Page() {
       {passedEnrollments.map((enrollment: any, i: number) => (
         <div key={i} className='border border-black'>
           <p>{enrollment.course.name.en}</p>
-          <Link href={`/courses/evaluate/${enrollment.course.code}`}>
+          <Link href={`/courses/evaluate/${enrollment._id}`}>
             Evaluate
           </Link>
         </div>

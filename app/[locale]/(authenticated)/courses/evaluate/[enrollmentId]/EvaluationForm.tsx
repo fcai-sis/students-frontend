@@ -9,8 +9,10 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 const evaluationFormSchema = z.object({
+  enrollmentId: z.string(),
   course: z.array(
     z.object({
+      questionId: z.string(),
       rating: z.string().refine((value) => value !== "0", {
         message: "Please select a rating",
       }),
@@ -18,6 +20,7 @@ const evaluationFormSchema = z.object({
   ),
   instructor: z.array(
     z.object({
+      questionId: z.string(),
       rating: z.string().refine((value) => value !== "0", {
         message: "Please select a rating",
       }),
@@ -26,6 +29,7 @@ const evaluationFormSchema = z.object({
   ta: z
     .array(
       z.object({
+        questionId: z.string(),
         rating: z.string().refine((value) => value !== "0", {
           message: "Please select a rating",
         }),
@@ -36,12 +40,14 @@ const evaluationFormSchema = z.object({
 
 export type EvaluationFormValues = z.infer<typeof evaluationFormSchema>;
 
-export default function EvaludationForm({
+export default function EvaluationForm({
   questions,
   options,
+  enrollmentId,
 }: {
   questions: any;
   options: any;
+  enrollmentId: string;
 }) {
   const t = useI18n();
   const router = useRouter();
@@ -54,14 +60,18 @@ export default function EvaludationForm({
   } = useForm<EvaluationFormValues>({
     resolver: zodResolver(evaluationFormSchema),
     defaultValues: {
-      course: questions.course.map(() => ({
+      enrollmentId,
+      course: questions.course.map((q: any) => ({
+        questionId: q.questionId,
         rating: "0",
       })),
-      instructor: questions.instructor.map(() => ({
+      instructor: questions.instructor.map((q: any) => ({
+        questionId: q.questionId,
         rating: "0",
       })),
       ta: questions.ta
-        ? questions.ta.map(() => ({
+        ? questions.ta.map((q: any) => ({
+            questionId: q.questionId,
             rating: "0",
           }))
         : undefined,
@@ -74,7 +84,6 @@ export default function EvaludationForm({
   });
 
   const onSubmit = async (values: EvaluationFormValues) => {
-    console.log(values);
     const result = await evaluateCourse(values);
     if (!result.success) {
       return toast.error(result.error?.message ?? "Failed to evaluate course");
@@ -85,9 +94,9 @@ export default function EvaludationForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h2>Evalute Course</h2>
+      <h2>Evaluate Course</h2>
       {courseFields.map((field, index) => {
-        const { question } = questions.course[index];
+        const { question, questionId } = questions.course[index];
         return (
           <div key={field.id}>
             <label>{question.ar}</label>
@@ -110,11 +119,12 @@ export default function EvaludationForm({
                 </option>
               ))}
             </select>
+            <input type="hidden" {...register(`course.${index}.questionId`)} value={questionId} />
           </div>
         );
       })}
-      <h2>Evalute Instructor</h2>
-      {questions.instructor.map(({ question }: any, index: number) => {
+      <h2>Evaluate Instructor</h2>
+      {questions.instructor.map(({ question, questionId }: any, index: number) => {
         return (
           <div key={index}>
             <label>{question.ar}</label>
@@ -137,13 +147,14 @@ export default function EvaludationForm({
                 </option>
               ))}
             </select>
+            <input type="hidden" {...register(`instructor.${index}.questionId`)} value={questionId} />
           </div>
         );
       })}
       {questions.ta && (
         <>
-          <h2>Evalute TA</h2>
-          {questions.ta.map(({ question }: any, index: number) => {
+          <h2>Evaluate TA</h2>
+          {questions.ta.map(({ question, questionId }: any, index: number) => {
             return (
               <div key={index}>
                 <label>{question.ar}</label>
@@ -166,6 +177,7 @@ export default function EvaludationForm({
                     </option>
                   ))}
                 </select>
+                <input type="hidden" {...register(`ta.${index}.questionId`)} value={questionId} />
               </div>
             );
           })}

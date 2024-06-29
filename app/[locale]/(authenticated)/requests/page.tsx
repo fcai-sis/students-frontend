@@ -33,7 +33,6 @@ export const getStudentServiceRequests = async (
       status,
     },
   });
-
   if (response.status !== 200)
     throw new Error("Failed to fetch service requests");
 
