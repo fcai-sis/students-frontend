@@ -1,5 +1,6 @@
 "use client";
 
+import { getCurrentPage } from "@/lib";
 import {
   I18nProviderClient,
   useCurrentLocale,
@@ -31,7 +32,7 @@ function _Pagination({
     [searchParams]
   );
 
-  const currentPage = parseInt(searchParams.get("page") ?? "1");
+  const currentPage = getCurrentPage(searchParams as any);
 
   const prevPage = currentPage > 1 ? currentPage - 1 : null;
   const nextPage = currentPage < totalPages ? currentPage + 1 : null;

@@ -119,38 +119,48 @@ export default function EvaluationForm({
                 </option>
               ))}
             </select>
-            <input type="hidden" {...register(`course.${index}.questionId`)} value={questionId} />
+            <input
+              type="hidden"
+              {...register(`course.${index}.questionId`)}
+              value={questionId}
+            />
           </div>
         );
       })}
       <h2>Evaluate Instructor</h2>
-      {questions.instructor.map(({ question, questionId }: any, index: number) => {
-        return (
-          <div key={index}>
-            <label>{question.ar}</label>
-            <select
-              {...register(`instructor.${index}.rating` as const)}
-              className={
-                !!errors.instructor &&
-                !!errors.instructor[index] &&
-                !!errors.instructor[index]!.rating
-                  ? "ring ring-red-500"
-                  : ""
-              }
-            >
-              <option value="0" disabled>
-                {t("evaluation.selectRating")}
-              </option>
-              {options.map((option: any) => (
-                <option key={option.value} value={option.value}>
-                  {option.label.ar}
+      {questions.instructor.map(
+        ({ question, questionId }: any, index: number) => {
+          return (
+            <div key={index}>
+              <label>{question.ar}</label>
+              <select
+                {...register(`instructor.${index}.rating` as const)}
+                className={
+                  !!errors.instructor &&
+                  !!errors.instructor[index] &&
+                  !!errors.instructor[index]!.rating
+                    ? "ring ring-red-500"
+                    : ""
+                }
+              >
+                <option value="0" disabled>
+                  {t("evaluation.selectRating")}
                 </option>
-              ))}
-            </select>
-            <input type="hidden" {...register(`instructor.${index}.questionId`)} value={questionId} />
-          </div>
-        );
-      })}
+                {options.map((option: any) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label.ar}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="hidden"
+                {...register(`instructor.${index}.questionId`)}
+                value={questionId}
+              />
+            </div>
+          );
+        }
+      )}
       {questions.ta && (
         <>
           <h2>Evaluate TA</h2>
@@ -177,7 +187,11 @@ export default function EvaluationForm({
                     </option>
                   ))}
                 </select>
-                <input type="hidden" {...register(`ta.${index}.questionId`)} value={questionId} />
+                <input
+                  type="hidden"
+                  {...register(`ta.${index}.questionId`)}
+                  value={questionId}
+                />
               </div>
             );
           })}

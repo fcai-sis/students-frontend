@@ -2,7 +2,7 @@ import AnnouncementCard from "@/components/AnnouncementCard";
 import { getCurrentLocale, getI18n } from "@/locales/server";
 import Pagination from "@/components/Pagination";
 import { localizedLevel, localizedSeverity } from "@/dummy/utils";
-import { getCurrentPage, limit, tt } from "@/lib";
+import { getCurrentPage, limit as LIMIT, tt } from "@/lib";
 import { SelectFilter } from "@/components/SetQueryFilter";
 import { announcementsAPI, departmentsAPI } from "@/api";
 import { AnnouncementSeveritiesEnum } from "@fcai-sis/shared-models";
@@ -13,12 +13,19 @@ export const getDepartments = async () => {
   return response.data;
 };
 
-export const getAnnouncements = async (
-  page: number,
-  department?: string,
-  level?: number,
-  severity?: string
-) => {
+export const getAnnouncements = async ({
+  page,
+  department,
+  level,
+  severity,
+  limit,
+}: {
+  page: number;
+  department?: string;
+  level?: number;
+  severity?: string;
+  limit?: number;
+}) => {
   const repsonse = await announcementsAPI.get<{
     announcements: any[];
     total: number;
@@ -28,6 +35,7 @@ export const getAnnouncements = async (
       department,
       level,
       severity,
+      limit: limit ?? LIMIT,
     },
   });
 
@@ -54,12 +62,12 @@ export default async function Page({
   const level = parseInt(searchParams.level);
   const severity = searchParams.severity;
 
-  const { announcements, total } = await getAnnouncements(
+  const { announcements, total } = await getAnnouncements({
     page,
     department,
     level,
-    severity
-  );
+    severity,
+  });
 
   const { departments } = await getDepartments();
 
@@ -142,7 +150,7 @@ export default async function Page({
           <AnnouncementCard key={i} announcement={announcement} />
         ))}
       </div>
-      <Pagination totalPages={total / limit} />
+      <Pagination totalPages={total / LIMIT} />
     </>
   );
 }

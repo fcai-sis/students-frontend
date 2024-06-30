@@ -15,7 +15,7 @@ import { DummyHall } from "@/dummy/halls";
  * @param slot - The slot to format its time
  * @returns 7:00 PM - 8:30 PM
  */
-function formatSlotTime(slot: DummySlot) {
+function formatSlotTime(slot: any) {
   const startTimeAmPm = slot.start.hour >= 12 ? "PM" : "AM";
   const endTimeAmPm = slot.end.hour >= 12 ? "PM" : "AM";
   const startTimeHour = slot.start.hour % 12 || 12;
@@ -40,6 +40,7 @@ function isSameSlot(slot1: DummySlot, slot2: DummySlot): boolean {
 
 export type ScheduleProps = {
   slots: Record<DayEnumType, DummySlot[]>;
+  days: { day: DayEnumType }[];
   timeRanges: {
     day: undefined;
     start: {
@@ -55,6 +56,7 @@ export type ScheduleProps = {
 };
 
 export default function Schedule({
+  days,
   timeRanges,
   slots,
   schedule,
@@ -77,22 +79,31 @@ export default function Schedule({
           ))}
         </div>
       </div>
-      {Object.keys(slots).map((currentDay) => (
+      {days.map(({ day: currentDay }) => (
         <div className="table-row" key={currentDay}>
           <div className="table-cell rounded-lg p-2 bg-white border border-slate-200">
             {tt(locale, dayLocalizedEnum[currentDay as DayEnumType])}
           </div>
-          {slots[currentDay as DayEnumType].map((currentTimeRange) => (
+          {timeRanges.map((currentTimeRange, index) => (
             <>
               {(() => {
                 // find all items that have the same slot and check if they are lectures or sections
                 const items = schedule.filter((item) =>
-                  isSameSlot(item.slot, currentTimeRange as DummySlot)
+                  isSameSlot(item.slot, {
+                    day: currentDay,
+                    start: currentTimeRange.start,
+                    end: currentTimeRange.end,
+                  })
                 );
 
                 if (items.length === 0)
                   return (
-                    <div className="table-cell bg-slate-100 rounded-lg"></div>
+                    <div
+                      className="table-cell bg-slate-100 rounded-lg"
+                      key={index}
+                    >
+                      {" "}
+                    </div>
                   );
 
                 // map each item to a form based on its type

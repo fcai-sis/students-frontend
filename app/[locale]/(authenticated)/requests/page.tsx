@@ -4,7 +4,7 @@ import { serviceRequestsAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import ServiceRequestCard from "@/components/ServiceRequestCard";
 import { SelectFilter } from "@/components/SetQueryFilter";
-import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
+import { getAccessToken, getCurrentPage, limit as LIMIT, tt } from "@/lib";
 import { getCurrentLocale, getI18n } from "@/locales/server";
 import {
   ServiceRequestStatusEnum,
@@ -15,10 +15,15 @@ import { Plus } from "iconoir-react";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 
-export const getStudentServiceRequests = async (
-  page: number,
-  status?: ServiceRequestStatusEnumType
-) => {
+export const getStudentServiceRequests = async ({
+  page,
+  status,
+  limit,
+}: {
+  page: number;
+  status?: ServiceRequestStatusEnumType;
+  limit?: number;
+}) => {
   const accessToken = await getAccessToken();
   const response = await serviceRequestsAPI.get<{
     serviceRequests: ServiceRequestType[];
@@ -29,7 +34,7 @@ export const getStudentServiceRequests = async (
     },
     params: {
       page,
-      limit,
+      limit: limit ?? LIMIT,
       status,
     },
   });
@@ -51,7 +56,7 @@ export default async function Page({
   const page = getCurrentPage(searchParams);
   const status = searchParams.status as ServiceRequestStatusEnumType;
 
-  const response = await getStudentServiceRequests(page, status);
+  const response = await getStudentServiceRequests({ page, status });
   const studentServiceRequests = response.serviceRequests;
   const totalRequests = response.totalServiceRequests;
 
@@ -116,7 +121,7 @@ export default async function Page({
           <ServiceRequestCard key={i} serviceRequest={serviceRequest} />
         ))}
       </div>
-      <Pagination totalPages={totalRequests / limit} />
+      <Pagination totalPages={totalRequests / LIMIT} />
     </>
   );
 }

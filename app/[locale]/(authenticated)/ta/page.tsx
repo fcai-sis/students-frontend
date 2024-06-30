@@ -72,10 +72,10 @@ export default async function Page({
     <>
       <div>
         <h1>Teaching Assistants</h1>
-        <SelectFilter name='department' options={departmentOptions} />
+        <SelectFilter name="department" options={departmentOptions} />
         <div>
-          {teachingAssistants.map((ta: any) => (
-            <div className='border border-black w-80'>
+          {teachingAssistants.map((ta: any, i: number) => (
+            <div className="border border-black w-80" key={i}>
               <p>
                 <b>Name: </b>
                 {ta.fullName}

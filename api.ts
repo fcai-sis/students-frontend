@@ -10,6 +10,21 @@ export const studentsAPI = axios.create({
   validateStatus: (status) => status < 500,
 });
 
+export const schedulesAPI = axios.create({
+  baseURL: process.env.SCHEDULES_API_URL,
+  validateStatus: (status) => status < 500,
+});
+
+export const hallsAPI = axios.create({
+  baseURL: process.env.HALLS_API_URL,
+  validateStatus: (status) => status < 500,
+});
+
+export const slotsAPI = axios.create({
+  baseURL: process.env.SLOTS_API_URL,
+  validateStatus: (status) => status < 500,
+});
+
 export const studentRegistrationAPI = axios.create({
   baseURL: process.env.STUDENT_REGISTRATION_API_URL,
   validateStatus: (status) => status < 500,

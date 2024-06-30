@@ -6,6 +6,7 @@ import Schedule from "@/components/Schedule";
 import { getAccessToken } from "@/lib";
 import { enrollmentsAPI } from "@/api";
 import { revalidatePath } from "next/cache";
+import { getSlots } from "../../page";
 
 export const getEligibleEnrollments = async () => {
   const accessToken = await getAccessToken();
@@ -29,7 +30,6 @@ export default async function Page() {
   const eligibleCourses = enrollments.map(
     (enrollment: any) => enrollment.course
   );
-  console.log(eligibleCourses);
 
   const _schedule = dummySchedule;
 
@@ -40,23 +40,17 @@ export default async function Page() {
     },
   });
   const { schedule } = scheduleData;
-
-  const _slots = dummySlotsByDay;
-  const _timeRanges = dummyTimeRanges;
-
-  const { data: slotData } = await fakeResponse({
-    status: 200,
-    data: {
-      slots: _slots,
-      timeRanges: _timeRanges,
-    },
-  });
-  const { slots, timeRanges } = slotData;
+  const { slots, timeRanges, days } = await getSlots();
 
   return (
     <>
       <RegisterCourseForm courses={eligibleCourses as any} />
-      <Schedule slots={slots} timeRanges={timeRanges} schedule={schedule} />
+      <Schedule
+        days={days}
+        slots={slots}
+        timeRanges={timeRanges}
+        schedule={schedule}
+      />
     </>
   );
 }

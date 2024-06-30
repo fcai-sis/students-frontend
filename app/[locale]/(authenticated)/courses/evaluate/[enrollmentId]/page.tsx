@@ -25,7 +25,8 @@ export default async function Page({
 
   const _enrollment = dummyEnrollments[0]; // TODO: Find the enrollment by enrollment id
 
-  const {data: response} = await courseEvaluationAPI.get(`/questions`,
+  const { data: response } = await courseEvaluationAPI.get(
+    `/questions`
     // {
     //   headers: {
     //     Authorization: `Bearer ${accessToken}`,
@@ -35,29 +36,27 @@ export default async function Page({
   const questions: IQuestion[] = response.evaluationQuestions;
 
   const formattedQuestions = {
-    course: questions.filter(q => q.type === 'course').map((q: IQuestion) => ({
-      questionId: q._id,
-      question: q.question,
-    })),
-    instructor: questions.filter(q => q.type === 'instructor').map((q: IQuestion) => ({
-      questionId: q._id,
-      question: q.question,
-    })),
-    ta: questions.filter(q => q.type === 'ta').map((q: IQuestion) => ({
-      questionId: q._id,
-      question: q.question,
-    })),
+    course: questions
+      .filter((q) => q.type === "course")
+      .map((q: IQuestion) => ({
+        questionId: q._id,
+        question: q.question,
+      })),
+    instructor: questions
+      .filter((q) => q.type === "instructor")
+      .map((q: IQuestion) => ({
+        questionId: q._id,
+        question: q.question,
+      })),
+    ta: questions
+      .filter((q) => q.type === "ta")
+      .map((q: IQuestion) => ({
+        questionId: q._id,
+        question: q.question,
+      })),
   };
 
-
-
-console.log("questions", questions, "enrollment", enrollmentId);
-
-const enrollment = _enrollment;
-
-    
-
-  // console.log("queestion", questions, "sss", questions.course);
+  const enrollment = _enrollment;
 
   const options = [
     {
@@ -86,7 +85,11 @@ const enrollment = _enrollment;
     <>
       <h1>Evaluating {enrollment.course.name.ar}</h1>
       <I18nProviderClient locale={locale}>
-        <EvaludationForm questions={formattedQuestions} enrollmentId={enrollment._id} options={options} />
+        <EvaludationForm
+          questions={formattedQuestions}
+          enrollmentId={enrollment._id}
+          options={options}
+        />
       </I18nProviderClient>
     </>
   );

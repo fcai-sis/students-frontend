@@ -42,8 +42,8 @@ export default async function Page({
     <>
       <h1>{t("myCourses.title")}</h1>
       <div>
-        {enrollments.map((enrollment: any) => (
-          <div className='border border-black w-80'>
+        {enrollments.map((enrollment: any, i: number) => (
+          <div className="border border-black w-80" key={i}>
             <h2>{enrollment.course.name.ar}</h2>
             <p>{enrollment.course.code} </p>
             <p>

@@ -42,8 +42,6 @@ export const updateProfileAction = async (data: updateProfileValues) => {
       ...data,
     },
   };
-  console.log(data);
-
   const response = await profileAPI.patch(`/student-profile`, requestBody, {
     headers: {
       Authorization: `Bearer ${accessToken}`,

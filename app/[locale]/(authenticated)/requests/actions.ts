@@ -10,8 +10,6 @@ import { revalidatePath } from "next/cache";
 export async function createServiceRequest(data: FormData) {
   const accessToken = await getAccessToken();
 
-  console.log(data);
-
   const response = await serviceRequestsAPI.post("/", data, {
     headers: {
       "Content-Type": "multipart/form-data",
