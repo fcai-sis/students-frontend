@@ -16,27 +16,35 @@ export async function searchForContact(query: string): Promise<ContactType[]> {
   const session = await getServerSession();
   const { userId } = tokenPayload(session);
 
-  const [students, instructors, tas] = await Promise.all([
-    StudentModel.find({ fullName: { $regex: query, $options: "i" } }),
+  const [
+    // students,
+    instructors,
+    tas,
+  ] = await Promise.all([
+    // StudentModel.find({ fullName: { $regex: query, $options: "i" } }),
     InstructorModel.find({ fullName: { $regex: query, $options: "i" } }),
     TeachingAssistantModel.find({
       fullName: { $regex: query, $options: "i" },
     }),
   ]);
 
-  const [studentChats, instructorChats, taChats] = await Promise.all([
-    ChatModel.find({
-      $or: [
-        {
-          user1: userId,
-          user2: { $in: students.map((student) => student._id) },
-        },
-        {
-          user2: userId,
-          user1: { $in: students.map((student) => student._id) },
-        },
-      ],
-    }),
+  const [
+    // studentChats,
+    instructorChats,
+    taChats,
+  ] = await Promise.all([
+    // ChatModel.find({
+    //   $or: [
+    //     {
+    //       user1: userId,
+    //       user2: { $in: students.map((student) => student._id) },
+    //     },
+    //     {
+    //       user2: userId,
+    //       user1: { $in: students.map((student) => student._id) },
+    //     },
+    //   ],
+    // }),
     ChatModel.find({
       $or: [
         {
@@ -65,18 +73,18 @@ export async function searchForContact(query: string): Promise<ContactType[]> {
 
   const results: ContactType[] = [];
 
-  for (const student of students) {
-    results.push({
-      fullName: student.fullName,
-      role: RoleEnum[1],
-      id: student.user.toString(),
-      chat: await formatContactChat({
-        chats: studentChats,
-        myUserId: userId!,
-        otherUserId: student.user.toString(),
-      }),
-    });
-  }
+  // for (const student of students) {
+  //   results.push({
+  //     fullName: student.fullName,
+  //     role: RoleEnum[1],
+  //     id: student.user.toString(),
+  //     chat: await formatContactChat({
+  //       chats: studentChats,
+  //       myUserId: userId!,
+  //       otherUserId: student.user.toString(),
+  //     }),
+  //   });
+  // }
 
   for (const instructor of instructors) {
     results.push({
