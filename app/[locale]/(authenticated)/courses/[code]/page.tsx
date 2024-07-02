@@ -27,8 +27,8 @@ export default async function Page({
   const course = response.course;
   return (
     <>
-      <h1>{course.name.en}</h1>
-      <p>{course.description.en}</p>
+      <h1 className='text-3xl font-bold mb-6'>{course.name.en}</h1>
+      <p className='text-gray-700'>{course.description.en}</p>
     </>
   );
 }
