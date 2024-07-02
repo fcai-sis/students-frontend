@@ -57,24 +57,29 @@ export default function UpdateProfileForm({ profileData }: any) {
   };
 
   return (
-    <>
-      <h1>Profile</h1>
-
+    <div className='max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md'>
+      <h1 className='text-2xl font-bold mb-6'>Profile</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-5">
+        <div className='mb-5'>
           {profileData.editableFields.map((field: any) => {
             const key = Object.keys(field)[0];
             return (
-              <div key={key}>
-                <label htmlFor={key}>{key}</label>
+              <div key={key} className='mb-4'>
+                <label
+                  htmlFor={key}
+                  className='block text-sm font-medium text-gray-700 mb-1'
+                >
+                  {key}
+                </label>
                 <input
                   {...register(key as keyof updateProfileValues)}
-                  type="text"
+                  type='text'
                   id={key}
                   defaultValue={profileFieldsLookup[key]}
+                  className='mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                 />
                 {errors[key as keyof updateProfileValues] && (
-                  <span className="text-red-500">
+                  <span className='text-red-500 text-sm'>
                     {errors[key as keyof updateProfileValues]?.message}
                   </span>
                 )}
@@ -82,26 +87,36 @@ export default function UpdateProfileForm({ profileData }: any) {
             );
           })}
         </div>
-        <div>
+        <div className='mb-5'>
           {profileData.viewableFields.map((field: any) => {
             const key = Object.keys(field)[0] as keyof StudentType;
             return (
-              <div key={key}>
-                <label htmlFor={key}>{key}</label>
+              <div key={key} className='mb-4'>
+                <label
+                  htmlFor={key}
+                  className='block text-sm font-medium text-gray-700 mb-1'
+                >
+                  {key}
+                </label>
                 <input
-                  type="text"
+                  type='text'
                   id={key}
                   defaultValue={field[key]}
                   disabled
+                  className='mt-1 p-2 block w-full border border-gray-300 rounded-md bg-gray-100 sm:text-sm'
                 />
               </div>
             );
           })}
         </div>
-        <button className="btn" type="submit" disabled={isSubmitting}>
+        <button
+          className='w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50'
+          type='submit'
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "Submitting" : "Submit"}
         </button>
       </form>
-    </>
+    </div>
   );
 }
