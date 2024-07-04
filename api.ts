@@ -39,6 +39,12 @@ export const coursesAPI = axios.create({
   baseURL: process.env.COURSES_API_URL,
   validateStatus: (status) => status < 500,
 });
+
+export const configAPI = axios.create({
+  baseURL: process.env.CONFIG_API_URL,
+  validateStatus: (status) => status < 500,
+});
+
 export const enrollmentsAPI = axios.create({
   baseURL: process.env.ENROLLMENTS_API_URL,
   validateStatus: (status) => status < 500,
@@ -66,5 +72,10 @@ export const departmentEnrollmentAPI = axios.create({
 
 export const courseEvaluationAPI = axios.create({
   baseURL: process.env.COURSE_EVALUATION_API_URL,
+  validateStatus: (status) => status < 500,
+});
+
+export const statisticsAPI = axios.create({
+  baseURL: process.env.STATISTICS_API_URL,
   validateStatus: (status) => status < 500,
 });

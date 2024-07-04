@@ -6,8 +6,9 @@ import Dropdown from "./Dropdown";
 import ChangeLanguageButton from "./ChangeLanguageButton";
 import { BookStack, Home, Megaphone, PageFlip } from "iconoir-react";
 import Image from "next/image";
+import { tt } from "@/lib";
 
-export default async function Navbar({ locale }: { locale: string }) {
+export default async function Navbar({ locale }: { locale: "en" | "ar" }) {
   const t = await getI18n();
 
   return (
@@ -37,6 +38,12 @@ export default async function Navbar({ locale }: { locale: string }) {
             </Link>
             <Link href="/ta" className="block w-full">
               {t("nav.teacherAssistants")}
+            </Link>
+            <Link href="/top" className="block w-full">
+              {tt(locale, {
+                en: "Top Students",
+                ar: "أفضل الطلاب",
+              })}
             </Link>
             <Link href="/profile" className="block w-full">
               {t("profile.title")}

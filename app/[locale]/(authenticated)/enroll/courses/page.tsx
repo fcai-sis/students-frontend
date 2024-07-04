@@ -1,9 +1,10 @@
 import RegisterCourseForm from "./RegisterCourseForm";
 import Schedule from "@/components/Schedule";
-import { getAccessToken } from "@/lib";
-import { enrollmentsAPI, schedulesAPI } from "@/api";
+import { getAccessToken, tt } from "@/lib";
+import { configAPI, enrollmentsAPI, schedulesAPI } from "@/api";
 import { revalidatePath } from "next/cache";
 import { getSlots } from "../../page";
+import { getCurrentLocale } from "@/locales/server";
 
 export const getEligibleEnrollments = async () => {
   const accessToken = await getAccessToken();
@@ -37,9 +38,31 @@ export const getEligibleSchedule = async () => {
   return response.data;
 };
 
+async function getCourseEnrollmentIsOpen() {
+  const response = await configAPI.get("/");
+
+  if (response.status !== 200)
+    throw new Error("Failed to fetch course enrollment status");
+
+  return response.data.isCourseEnrollOpen;
+}
+
 export default async function Page() {
-  const response = await getEligibleEnrollments();
-  const enrollments = response.courses;
+  const locale = getCurrentLocale();
+  const courseEnrollmentIsOpen = await getCourseEnrollmentIsOpen();
+
+  if (!courseEnrollmentIsOpen) {
+    return (
+      <div>
+        {tt(locale, {
+          en: "Course enrollment is not open",
+          ar: "تسجيل المقررات غير متاح الآن",
+        })}
+      </div>
+    );
+  }
+
+  const { enrollments } = await getEligibleEnrollments();
   const eligibleCourses = enrollments.map(
     (enrollment: any) => enrollment.course
   );

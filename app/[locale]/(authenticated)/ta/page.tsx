@@ -4,6 +4,7 @@ import { SelectFilter } from "@/components/SetQueryFilter";
 import { getAccessToken, getCurrentPage, limit } from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
+import { getDepartments } from "../announcements/page";
 
 export const getTeachingAssistants = async (
   page: number,
@@ -29,21 +30,6 @@ export const getTeachingAssistants = async (
   return response.data;
 };
 
-export const getDepartments = async () => {
-  const accessToken = await getAccessToken();
-  const response = await departmentsAPI.get(`/`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (response.status !== 200) throw new Error("Failed to fetch departments");
-
-  revalidatePath("/department");
-
-  return response.data;
-};
-
 export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string; department: string } }>) {
@@ -55,7 +41,7 @@ export default async function Page({
   const teachingAssistants = response.teachingAssistants;
   const total = response.totalTeachingAssistants;
 
-  const departments = await getDepartments();
+  const { departments } = await getDepartments();
 
   const departmentOptions = [
     {
