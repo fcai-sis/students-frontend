@@ -91,7 +91,7 @@ export default async function Page() {
           <div className="flex flex-col items-center">
             <RadialProgress
               colorize={false}
-              value={student.creditHours}
+              value={student.mandatoryHours + student.electiveHours}
               max={130}
             />
             <p>

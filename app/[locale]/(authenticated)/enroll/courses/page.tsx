@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { getSlots } from "../../page";
 import { getCurrentLocale } from "@/locales/server";
 
-export const getEligibleEnrollments = async () => {
+export const getEligibleCourses = async () => {
   const accessToken = await getAccessToken();
 
   const response = await enrollmentsAPI.get(`/eligible`, {
@@ -15,7 +15,7 @@ export const getEligibleEnrollments = async () => {
     },
   });
 
-  if (response.status !== 200) throw new Error("Failed to fetch enrollments");
+  if (response.status !== 200) throw new Error("Failed to fetch courses");
 
   revalidatePath("/enroll");
 
@@ -44,7 +44,7 @@ async function getCourseEnrollmentIsOpen() {
   if (response.status !== 200)
     throw new Error("Failed to fetch course enrollment status");
 
-  return response.data.isCourseEnrollOpen;
+  return response.data.config.isCourseEnrollOpen;
 }
 
 export default async function Page() {
@@ -62,10 +62,8 @@ export default async function Page() {
     );
   }
 
-  const { enrollments } = await getEligibleEnrollments();
-  const eligibleCourses = enrollments.map(
-    (enrollment: any) => enrollment.course
-  );
+  const { courses } = await getEligibleCourses();
+  const eligibleCourses = courses.map((c: any) => c.course);
 
   const { schedule } = await getEligibleSchedule();
   const { slots, timeRanges, days } = await getSlots();
