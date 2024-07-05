@@ -68,6 +68,8 @@ export default async function Page() {
   const { schedule } = await getEligibleSchedule();
   const { slots, timeRanges, days } = await getSlots();
 
+  console.log(slots, timeRanges, days, schedule);
+
   return (
     <>
       <RegisterCourseForm courses={eligibleCourses as any} />

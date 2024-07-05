@@ -29,6 +29,9 @@ function formatSlotTime(slot: any) {
 }
 
 function isSameSlot(slot1: DummySlot, slot2: DummySlot): boolean {
+  console.log(
+    `compare ${JSON.stringify(slot1)} with ${JSON.stringify(slot2)} `
+  );
   return (
     slot1.day === slot2.day &&
     slot1.start.hour === slot2.start.hour &&
