@@ -110,27 +110,34 @@ export default function Schedule({
                   );
 
                 // map each item to a form based on its type
-                return items.map((item, index) => {
-                  if (item.type === "lecture") {
-                    return (
-                      <LectureSlot
-                        key={index}
-                        lecture={item.lecture}
-                        hall={item.hall}
-                      />
-                    );
-                  } else if (item.type === "section") {
-                    return (
-                      <SectionSlot
-                        key={index}
-                        section={item.secion}
-                        hall={item.hall}
-                      />
-                    );
-                  } else {
-                    return "Invalid type";
-                  }
-                });
+                return (
+                  <div
+                    className="table-cell bg-slate-100 rounded-lg"
+                    key={index}
+                  >
+                    {items.map((item, index) => {
+                      if (item.type === "lecture") {
+                        return (
+                          <LectureSlot
+                            key={index}
+                            lecture={item.lecture}
+                            hall={item.hall}
+                          />
+                        );
+                      } else if (item.type === "section") {
+                        return (
+                          <SectionSlot
+                            key={index}
+                            section={item.secion}
+                            hall={item.hall}
+                          />
+                        );
+                      } else {
+                        return "Invalid type";
+                      }
+                    })}
+                  </div>
+                );
               })()}
             </>
           ))}

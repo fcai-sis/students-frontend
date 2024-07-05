@@ -76,7 +76,7 @@ export default function RegisterCourseForm({
               defaultValue={field.course}
               onChange={(e) => handleCourseChange(index, e.target.value)}
             >
-              <option value='' disabled>
+              <option value="" disabled>
                 Select a course
               </option>
               {courses
@@ -98,7 +98,7 @@ export default function RegisterCourseForm({
               {...register(`courses.${index}.group` as const)}
               defaultValue={field.group}
             >
-              <option value='' disabled>
+              <option value="" disabled>
                 Select a group
               </option>
               {(courses as any)
@@ -110,7 +110,7 @@ export default function RegisterCourseForm({
                 ))}
             </select>
             <button
-              type='button'
+              type="button"
               onClick={() => {
                 removeCourse(index);
                 const newSelectedCourses = [...selectedCourses];
@@ -123,13 +123,13 @@ export default function RegisterCourseForm({
           </div>
         ))}
         <button
-          type='button'
+          type="button"
           onClick={() => addCourse({ course: "", group: "" })}
         >
           Add Course
         </button>
 
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <button className="btn" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
         </button>
       </form>
