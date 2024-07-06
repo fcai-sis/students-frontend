@@ -1,12 +1,14 @@
 "use client";
 
-import { useI18n } from "@/locales/client";
+import { useCurrentLocale, useI18n } from "@/locales/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { evaluateCourse } from "./actions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { tt } from "@/lib";
+import { PageHeader } from "@/components/PageBuilder";
 
 const evaluationFormSchema = z.object({
   enrollmentId: z.string(),
@@ -43,12 +45,18 @@ export type EvaluationFormValues = z.infer<typeof evaluationFormSchema>;
 export default function EvaluationForm({
   questions,
   options,
+  courseName,
   enrollmentId,
 }: {
   questions: any;
   options: any;
   enrollmentId: string;
+  courseName: {
+    ar: string;
+    en: string;
+  };
 }) {
+  const locale = useCurrentLocale();
   const t = useI18n();
   const router = useRouter();
 
@@ -89,17 +97,23 @@ export default function EvaluationForm({
       return toast.error(result.error?.message ?? "Failed to evaluate course");
     }
     toast.success("Course evaluated successfully");
-    router.push("/courses/evaluate");
+    router.push("/evaluate");
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h2>Evaluate Course</h2>
+      <PageHeader
+        title={tt(locale, {
+          en: `Evaluate ${courseName.en}`,
+          ar: `تقييم ${courseName.ar}`,
+        })}
+        actions={[]}
+      />
       {courseFields.map((field, index) => {
         const { question, questionId } = questions.course[index];
         return (
           <div key={field.id}>
-            <label>{question.ar}</label>
+            <label>{tt(locale, question)}</label>
             <select
               {...register(`course.${index}.rating` as const)}
               className={
@@ -111,11 +125,14 @@ export default function EvaluationForm({
               }
             >
               <option value="0" disabled>
-                {t("evaluation.selectRating")}
+                {tt(locale, {
+                  en: "Please select a rating",
+                  ar: "يرجى تحديد التقييم",
+                })}
               </option>
               {options.map((option: any) => (
                 <option key={option.value} value={option.value}>
-                  {option.label.ar}
+                  {tt(locale, option.label)}
                 </option>
               ))}
             </select>
@@ -132,7 +149,7 @@ export default function EvaluationForm({
         ({ question, questionId }: any, index: number) => {
           return (
             <div key={index}>
-              <label>{question.ar}</label>
+              <label>{tt(locale, question)}</label>
               <select
                 {...register(`instructor.${index}.rating` as const)}
                 className={
@@ -148,7 +165,7 @@ export default function EvaluationForm({
                 </option>
                 {options.map((option: any) => (
                   <option key={option.value} value={option.value}>
-                    {option.label.ar}
+                    {tt(locale, option.label)}
                   </option>
                 ))}
               </select>
@@ -167,7 +184,7 @@ export default function EvaluationForm({
           {questions.ta.map(({ question, questionId }: any, index: number) => {
             return (
               <div key={index}>
-                <label>{question.ar}</label>
+                <label>{tt(locale, question)}</label>
                 <select
                   {...register(`ta.${index}.rating` as const)}
                   className={
@@ -183,7 +200,7 @@ export default function EvaluationForm({
                   </option>
                   {options.map((option: any) => (
                     <option key={option.value} value={option.value}>
-                      {option.label.ar}
+                      {tt(locale, option.label)}
                     </option>
                   ))}
                 </select>

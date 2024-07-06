@@ -29,11 +29,15 @@ export async function evaluateCourse(data: EvaluationFormValues) {
     evaluationAnswers,
   };
 
-  const response = await courseEvaluationAPI.post(`/evaluation-answer/submit-answers`, payload, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const response = await courseEvaluationAPI.post(
+    `/evaluation-answer/submit-answers`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
 
   if (response.status !== 201) {
     return {
@@ -45,6 +49,6 @@ export async function evaluateCourse(data: EvaluationFormValues) {
       },
     };
   }
-  
+
   return { success: true };
 }

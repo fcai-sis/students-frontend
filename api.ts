@@ -84,6 +84,11 @@ export const courseEvaluationAPI = axios.create({
   validateStatus: (status) => status < 500,
 });
 
+export const questionsAPI = axios.create({
+  baseURL: process.env.QUESTIONS_API_URL,
+  validateStatus: (status) => status < 500,
+});
+
 export const statisticsAPI = axios.create({
   baseURL: process.env.STATISTICS_API_URL,
   validateStatus: (status) => status < 500,

@@ -1,14 +1,9 @@
-import { dummyEnrollments } from "@/dummy/enrollments";
-import {
-  dummyCourseEvaluationQuestions,
-  dummyInstructorEvaluationQuestions,
-  dummyTAEvaluationQuestions,
-} from "@/dummy/evaluationQuestions";
-import { fakeResponse } from "@/dummy/utils";
-import { getI18n } from "@/locales/server";
 import EvaludationForm from "./EvaluationForm";
 import { I18nProviderClient } from "@/locales/client";
-import { courseEvaluationAPI } from "@/api";
+import { courseEvaluationAPI, enrollmentsAPI, questionsAPI } from "@/api";
+import { tt } from "@/lib";
+import { getCurrentLocale } from "@/locales/server";
+import { getPassedEnrollments } from "../page";
 
 interface IQuestion {
   _id: string;
@@ -17,23 +12,25 @@ interface IQuestion {
 }
 
 export default async function Page({
-  params: { locale, enrollmentId },
+  params: { enrollmentId },
 }: Readonly<{
-  params: { locale: string; enrollmentId: string };
+  params: { enrollmentId: string };
 }>) {
-  const t = await getI18n();
+  const locale = getCurrentLocale();
+  const { passedEnrollments } = await getPassedEnrollments();
 
-  const _enrollment = dummyEnrollments[0]; // TODO: Find the enrollment by enrollment id
-
-  const { data: response } = await courseEvaluationAPI.get(
-    `/questions`
-    // {
-    //   headers: {
-    //     Authorization: `Bearer ${accessToken}`,
-    //   },
-    // }
+  const enrollment = passedEnrollments.find(
+    (e: any) => e._id.toString() === enrollmentId
   );
-  const questions: IQuestion[] = response.evaluationQuestions;
+
+  console.log("enrollment", enrollment);
+  const courseName = enrollment.course.name;
+
+  const { data } = await questionsAPI.get(`/`);
+
+  console.log("DARATATATATATA", data);
+
+  const questions: IQuestion[] = data.evaluationQuestions;
 
   const formattedQuestions = {
     course: questions
@@ -55,8 +52,6 @@ export default async function Page({
         question: q.question,
       })),
   };
-
-  const enrollment = _enrollment;
 
   const options = [
     {
@@ -83,11 +78,11 @@ export default async function Page({
 
   return (
     <>
-      <h1>Evaluating {enrollment.course.name.ar}</h1>
       <I18nProviderClient locale={locale}>
         <EvaludationForm
           questions={formattedQuestions}
-          enrollmentId={enrollment._id}
+          courseName={courseName}
+          enrollmentId={enrollmentId}
           options={options}
         />
       </I18nProviderClient>
