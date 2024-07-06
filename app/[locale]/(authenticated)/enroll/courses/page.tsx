@@ -16,7 +16,6 @@ export const getEligibleCourses = async () => {
   });
 
   if (response.status !== 200) throw new Error("Failed to fetch courses");
-
   revalidatePath("/enroll");
 
   return response.data;
@@ -32,7 +31,6 @@ export const getEligibleSchedule = async () => {
   });
 
   if (response.status !== 200) throw new Error("Failed to fetch schedule");
-
   revalidatePath("/enroll");
 
   return response.data;
@@ -63,12 +61,13 @@ export default async function Page() {
   }
 
   const { courses } = await getEligibleCourses();
-  const eligibleCourses = courses.map((c: any) => c.course);
+  const eligibleCourses = courses.map((c: any) => ({
+    course: c.course,
+    groups: c.sections.map((s: any) => s.group),
+  }));
 
   const { schedule } = await getEligibleSchedule();
   const { slots, timeRanges, days } = await getSlots();
-
-  console.log(slots, timeRanges, days, schedule);
 
   return (
     <>

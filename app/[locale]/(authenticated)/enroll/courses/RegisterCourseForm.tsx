@@ -3,10 +3,15 @@ import { CourseType } from "@fcai-sis/shared-models";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useFieldArray, useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import { dummyEnrollInCourseAction, enrollInCourseAction } from "./actions";
+import { enrollInCourseAction } from "./actions";
+import { PageHeader } from "@/components/PageBuilder";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
+import { Button } from "@/components/Buttons";
+import Spinner from "@/components/Spinner";
 
 const enrollInCourseFormSchema = z.object({
   courses: z.array(
@@ -19,8 +24,9 @@ export type enrollInCourseFormValues = z.infer<typeof enrollInCourseFormSchema>;
 export default function RegisterCourseForm({
   courses,
 }: {
-  courses: CourseType[];
+  courses: { course: CourseType; groups: string[] }[];
 }) {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
 
@@ -66,51 +72,70 @@ export default function RegisterCourseForm({
 
   return (
     <>
-      <h1>Eligible Courses</h1>
+      <PageHeader
+        title={tt(locale, {
+          en: "Register Courses",
+          ar: "تسجيل المقررات",
+        })}
+        actions={[]}
+      />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
         {courseFields.map((field, index) => (
-          <div key={field.id}>
+          <div key={field.id} className="flex gap-2">
             <select
               {...register(`courses.${index}.course` as const)}
               defaultValue={field.course}
               onChange={(e) => handleCourseChange(index, e.target.value)}
             >
               <option value="" disabled>
-                Select a course
+                {tt(locale, {
+                  en: "Select a course",
+                  ar: "اختر مقرراً",
+                })}
               </option>
               {courses
                 .filter(
                   (course) =>
-                    !selectedCourses.includes(course.code) ||
-                    course.code === selectedCourses[index]
+                    !selectedCourses.includes(course.course.code) ||
+                    course.course.code === selectedCourses[index]
                 )
                 .map((course) => (
-                  <option key={course.code} value={course.code}>
-                    {course.code}
+                  <option key={course.course.code} value={course.course.code}>
+                    ({course.course.code}) {tt(locale, course.course.name)}
                   </option>
                 ))}
             </select>
             {errors.courses && errors.courses[index] && (
               <span>{errors.courses[index]?.message}</span>
             )}
-            <select
-              {...register(`courses.${index}.group` as const)}
-              defaultValue={field.group}
-            >
-              <option value="" disabled>
-                Select a group
-              </option>
-              {(courses as any)
-                .find((course: any) => course.code === selectedCourses[index])
-                ?.groups?.map((group: string) => (
-                  <option key={group} value={group}>
-                    {group}
-                  </option>
-                ))}
-            </select>
-            <button
+            {courses.find(
+              (course) => course.course.code === selectedCourses[index]
+            )?.groups.length !== 0 && (
+              <select
+                {...register(`courses.${index}.group` as const)}
+                defaultValue={field.group}
+              >
+                <option value="" disabled>
+                  {tt(locale, {
+                    en: "Select a group",
+                    ar: "اختر مجموعة",
+                  })}
+                </option>
+                {courses
+                  .find(
+                    (course) => course.course.code === selectedCourses[index]
+                  )
+                  ?.groups?.map((group: string) => (
+                    <option key={group} value={group}>
+                      {group}
+                    </option>
+                  ))}
+              </select>
+            )}
+            <Button
               type="button"
+              variant="danger"
               onClick={() => {
                 removeCourse(index);
                 const newSelectedCourses = [...selectedCourses];
@@ -118,20 +143,33 @@ export default function RegisterCourseForm({
                 setSelectedCourses(newSelectedCourses);
               }}
             >
-              Remove Course
-            </button>
+              {tt(locale, {
+                en: "Remove Course",
+                ar: "إزالة المقرر",
+              })}
+            </Button>
           </div>
         ))}
-        <button
+        <Button
           type="button"
           onClick={() => addCourse({ course: "", group: "" })}
         >
-          Add Course
-        </button>
+          {tt(locale, {
+            en: "Add Course",
+            ar: "إضافة مقرر",
+          })}
+        </Button>
 
-        <button className="btn" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting" : "Submit"}
-        </button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <Spinner />
+          ) : (
+            tt(locale, {
+              en: "Enroll",
+              ar: "تسجيل",
+            })
+          )}
+        </Button>
       </form>
     </>
   );

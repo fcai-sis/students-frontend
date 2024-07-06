@@ -9,16 +9,26 @@ import { fakeResponse } from "@/dummy/utils";
 export const enrollInCourseAction = async (data: enrollInCourseFormValues) => {
   const accessToken = await getAccessToken();
 
+  console.log("enrollInCourseAction", data);
+
   // map the form data to the request body, turn it into an actual array, remove any empty values and duplicates
   const formData = {
-    courses: data.courses.map((course) => course.course).filter(Boolean),
+    courses: data.courses
+      .map((course) => ({
+        course: course.course,
+        group: course.group,
+      }))
+      .filter(Boolean),
   };
 
   const requestBody = {
-    coursesToEnrollIn: formData.courses.map((course) => ({
+    coursesToEnrollIn: formData.courses.map(({ course, group }) => ({
       courseCode: course,
+      group,
     })),
   };
+
+  console.log("KOSOM EL SISI", requestBody);
 
   const response = await enrollmentsAPI.post(`/`, requestBody, {
     headers: {

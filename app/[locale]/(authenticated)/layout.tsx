@@ -1,12 +1,12 @@
 import Navbar from "@/components/Navbar";
-import { ensureAuthenticated } from "@/lib";
+import { ensureAuthenticated, SupportedLocale } from "@/lib";
 
 export default async function Layout({
   children,
   params: { locale },
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: SupportedLocale };
 }>) {
   await ensureAuthenticated();
   return (

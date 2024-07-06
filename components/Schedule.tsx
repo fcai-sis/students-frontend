@@ -128,7 +128,7 @@ export default function Schedule({
                         return (
                           <SectionSlot
                             key={index}
-                            section={item.secion}
+                            section={item.section}
                             hall={item.hall}
                           />
                         );
@@ -177,6 +177,8 @@ type SectionSlotProps = Readonly<{
   hall: DummyHall;
 }>;
 function SectionSlot({ section, hall }: SectionSlotProps) {
+  console.log("ABO EL SAKASHEN", section, hall);
+
   const locale = getCurrentLocale();
   return (
     <div className="p-2 m-1 rounded-lg bg-white border border-slate-200">

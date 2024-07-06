@@ -6,9 +6,9 @@ import Dropdown from "./Dropdown";
 import ChangeLanguageButton from "./ChangeLanguageButton";
 import { BookStack, Home, Megaphone, PageFlip } from "iconoir-react";
 import Image from "next/image";
-import { tt } from "@/lib";
+import { SupportedLocale, tt } from "@/lib";
 
-export default async function Navbar({ locale }: { locale: "en" | "ar" }) {
+export default async function Navbar({ locale }: { locale: SupportedLocale }) {
   const t = await getI18n();
 
   return (

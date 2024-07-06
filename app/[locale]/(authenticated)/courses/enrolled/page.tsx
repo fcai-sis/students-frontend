@@ -1,7 +1,9 @@
 import { enrollmentsAPI } from "@/api";
+import { ButtonLink } from "@/components/Buttons";
+import { PageHeader } from "@/components/PageBuilder";
 import Pagination from "@/components/Pagination";
-import { getAccessToken, getCurrentPage, limit } from "@/lib";
-import { getI18n } from "@/locales/server";
+import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
+import { getCurrentLocale, getI18n } from "@/locales/server";
 import { EnrollmentStatusEnum } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
@@ -10,17 +12,11 @@ export const getStudentEnrollments = async (page: number) => {
   const accessToken = await getAccessToken();
 
   const response = await enrollmentsAPI.get(`/enrolled`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    params: {
-      skip: page * limit - limit,
-      limit,
-    },
+    headers: { Authorization: `Bearer ${accessToken}` },
+    params: { page, limit },
   });
 
   if (response.status !== 200) throw new Error("Failed to fetch enrollments");
-
   revalidatePath("/courses");
 
   return response.data;
@@ -31,107 +27,154 @@ export default async function Page({
 }: Readonly<{ searchParams: { page: string } }>) {
   const t = await getI18n();
 
+  const locale = getCurrentLocale();
   const page = getCurrentPage(searchParams);
 
-  const response = await getStudentEnrollments(page);
-  const enrollments = response.courses;
-
-  const total = response.totalStudentEnrollments;
+  const { enrollments, total } = await getStudentEnrollments(page);
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-6">{t("myCourses.title")}</h1>
+      <PageHeader
+        title={tt(locale, {
+          en: "My Courses",
+          ar: "مقرراتي",
+        })}
+        actions={[
+          <ButtonLink href="/enroll/courses">
+            {tt(locale, {
+              en: "Enroll in a new course",
+              ar: "التسجيل في مقرر جديد",
+            })}
+          </ButtonLink>,
+        ]}
+      />
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-slate-200">
+          <thead className="bg-slate-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Course Name
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider">
+                {tt(locale, {
+                  en: "Course Code",
+                  ar: "رمز المقرر",
+                })}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Course Code
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider">
+                {tt(locale, {
+                  en: "Course Name",
+                  ar: "اسم المقرر",
+                })}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Credit Hours
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider">
+                {tt(locale, {
+                  en: "Group",
+                  ar: "المجموعة",
+                })}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Exam Hall
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider">
+                {tt(locale, {
+                  en: "Credit Hours",
+                  ar: "الساعات المعتمدة",
+                })}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Seat Number
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider">
+                {tt(locale, {
+                  en: "Exam Hall",
+                  ar: "قاعة الامتحان",
+                })}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Mark
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider">
+                {tt(locale, {
+                  en: "Seat Number",
+                  ar: "رقم الجلوس",
+                })}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Final Exam Grade
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider">
+                {tt(locale, {
+                  en: "Grade",
+                  ar: "الدرجة",
+                })}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Term Work Grade
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider">
+                {tt(locale, {
+                  en: "Final Exam Mark",
+                  ar: "درجة الامتحان النهائي",
+                })}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Total Grade
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider">
+                {tt(locale, {
+                  en: "Term Work Mark",
+                  ar: "درجة العمل الفصلي",
+                })}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider">
+                {tt(locale, {
+                  en: "Total Mark",
+                  ar: "الدرجة الكلية",
+                })}
               </th>
+              <th className="px-6 py-3 text-start text-xs font-medium text-slate-600 uppercase tracking-wider"></th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-slate-200">
             {enrollments.map((enrollment: any, i: number) => (
               <tr key={i}>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    {enrollment.course.name.ar}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-slate-600">
                     {enrollment.course.code}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm font-medium text-slate-900">
+                    {tt(locale, enrollment.course.name)}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-slate-600">
+                    {enrollment.group}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-slate-600">
                     {enrollment.course.creditHours}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {enrollment.examHall ? (
-                    <div className="text-sm text-gray-500">
-                      {enrollment.examHall.name.en}
+                    <div className="text-sm text-slate-600">
+                      {tt(locale, enrollment.examHall.name)}
                     </div>
                   ) : (
-                    <div className="text-sm text-gray-500">N/A</div>
+                    <div className="text-sm text-slate-600">N/A</div>
                   )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {enrollment.seatNumber ? (
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-slate-600">
                       {enrollment.seatNumber}
                     </div>
                   ) : (
-                    <div className="text-sm text-gray-500">N/A</div>
+                    <div className="text-sm text-slate-600">N/A</div>
                   )}
                 </td>
                 {enrollment.status !== EnrollmentStatusEnum[0] ? (
                   <>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-slate-600">
                         {enrollment.grade}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-slate-600">
                         {enrollment.finalExamMark}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-slate-600">
                         {enrollment.termWorkMark}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-slate-600">
                         {enrollment.finalExamMark + enrollment.termWorkMark}
                       </div>
                     </td>
@@ -139,27 +182,27 @@ export default async function Page({
                 ) : (
                   <>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">N/A</div>
+                      <div className="text-sm text-slate-600">N/A</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">N/A</div>
+                      <div className="text-sm text-slate-600">N/A</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">N/A</div>
+                      <div className="text-sm text-slate-600">N/A</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">N/A</div>
+                      <div className="text-sm text-slate-600">N/A</div>
                     </td>
                   </>
                 )}
-                <td className="px-6 py-4 whitespace-nowrap">
+                {/* <td className="px-6 py-4 whitespace-nowrap">
                   <Link
                     href={`/courses/${enrollment.course.code}`}
                     className="text-blue-500 hover:underline"
                   >
                     View details
                   </Link>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
