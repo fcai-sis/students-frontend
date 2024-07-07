@@ -29,7 +29,7 @@ export default async function Page() {
 
   return (
     <>
-      <I18nProviderClient locale='en'>
+      <I18nProviderClient locale="en">
         <DepartmentPreferenceForm
           departments={filteredDepartments as DepartmentType[]}
         />

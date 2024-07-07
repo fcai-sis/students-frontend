@@ -1,7 +1,6 @@
 import EvaludationForm from "./EvaluationForm";
 import { I18nProviderClient } from "@/locales/client";
-import { courseEvaluationAPI, enrollmentsAPI, questionsAPI } from "@/api";
-import { tt } from "@/lib";
+import { questionsAPI } from "@/api";
 import { getCurrentLocale } from "@/locales/server";
 import { getPassedEnrollments } from "../page";
 

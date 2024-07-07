@@ -7,6 +7,10 @@ import { useRouter } from "next/navigation";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import toast from "react-hot-toast";
 import { submitDepartmentPreferenceAction } from "./actions";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
+import { PageHeader } from "@/components/PageBuilder";
+import { Button } from "@/components/Buttons";
 
 const departmentPreferenceFormSchema = z.object({
   preferences: z.array(
@@ -23,6 +27,7 @@ export type DepartmentPreferenceFormValues = z.infer<
 export default function DepartmentPreferenceForm({
   departments,
 }: Readonly<{ departments: any[] }>) {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -66,49 +71,58 @@ export default function DepartmentPreferenceForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Department Preference Form</h1>
-      <DragDropContext onDragEnd={handleDrag}>
-        <ul>
-          <Droppable droppableId='preferences-items'>
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {fields.map((field, index) => (
-                  <Draggable
-                    key={`preferences[${index}]`}
-                    draggableId={`preferences-${index}`}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <li
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                        className='bg-gray-100 p-2 mb-2'
-                      >
-                        <input
-                          type='hidden'
-                          {...register(`preferences.${index}.code` as const)}
-                          value={field.code}
-                        />
-                        {
-                          departments.find(
-                            (department) => department.code === field.code
-                          )?.name.en
-                        }
-                      </li>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </ul>
-      </DragDropContext>
-      <button className='btn' type='submit' disabled={isSubmitting}>
-        {isSubmitting ? "Submitting" : "Submit"}
-      </button>
-    </form>
+    <>
+      <PageHeader
+        title={tt(locale, {
+          en: "Department Preferences",
+          ar: "تفضيلات الأقسام",
+        })}
+        actions={[]}
+      />
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-96">
+        <DragDropContext onDragEnd={handleDrag}>
+          <ul>
+            <Droppable droppableId="preferences-items">
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {fields.map((field, index) => (
+                    <Draggable
+                      key={`preferences[${index}]`}
+                      draggableId={`preferences-${index}`}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <li
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          ref={provided.innerRef}
+                          className="bg-gray-100 p-2 mb-2"
+                        >
+                          <input
+                            type="hidden"
+                            {...register(`preferences.${index}.code` as const)}
+                            value={field.code}
+                          />
+                          {tt(
+                            locale,
+                            departments.find(
+                              (department) => department.code === field.code
+                            )?.name
+                          )}
+                        </li>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </ul>
+        </DragDropContext>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting" : "Submit"}
+        </Button>
+      </form>
+    </>
   );
 }

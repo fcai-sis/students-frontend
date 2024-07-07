@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { tt } from "@/lib";
 import { PageHeader } from "@/components/PageBuilder";
+import Spinner from "@/components/Spinner";
 
 const evaluationFormSchema = z.object({
   enrollmentId: z.string(),
@@ -101,7 +102,7 @@ export default function EvaluationForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <PageHeader
         title={tt(locale, {
           en: `Evaluate ${courseName.en}`,
@@ -112,7 +113,7 @@ export default function EvaluationForm({
       {courseFields.map((field, index) => {
         const { question, questionId } = questions.course[index];
         return (
-          <div key={field.id}>
+          <div key={field.id} className="flex gap-4 items-center">
             <label>{tt(locale, question)}</label>
             <select
               {...register(`course.${index}.rating` as const)}
@@ -144,11 +145,16 @@ export default function EvaluationForm({
           </div>
         );
       })}
-      <h2>Evaluate Instructor</h2>
+      <h2>
+        {tt(locale, {
+          en: "Evaluate Instructor",
+          ar: "تقييم الدكتور",
+        })}
+      </h2>
       {questions.instructor.map(
         ({ question, questionId }: any, index: number) => {
           return (
-            <div key={index}>
+            <div key={index} className="flex gap-4 items-center">
               <label>{tt(locale, question)}</label>
               <select
                 {...register(`instructor.${index}.rating` as const)}
@@ -180,10 +186,15 @@ export default function EvaluationForm({
       )}
       {questions.ta && (
         <>
-          <h2>Evaluate TA</h2>
+          <h2>
+            {tt(locale, {
+              en: "Evaluate Teaching Assistant",
+              ar: "تقييم المعيد",
+            })}
+          </h2>
           {questions.ta.map(({ question, questionId }: any, index: number) => {
             return (
-              <div key={index}>
+              <div key={index} className="flex gap-4 items-center">
                 <label>{tt(locale, question)}</label>
                 <select
                   {...register(`ta.${index}.rating` as const)}
@@ -215,7 +226,14 @@ export default function EvaluationForm({
         </>
       )}
       <button className="btn" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Submitting" : "Submit"}
+        {isSubmitting ? (
+          <Spinner />
+        ) : (
+          tt(locale, {
+            en: "Submit",
+            ar: "إرسال",
+          })
+        )}
       </button>
     </form>
   );
