@@ -2,13 +2,22 @@ import Locale from "intl-locale-textinfo-polyfill";
 import { Rubik } from "next/font/google";
 import "../globals.css";
 import { Toaster } from "react-hot-toast";
-import { Metadata } from "next";
+import { SupportedLocale, tt } from "@/lib";
 
 const rubik = Rubik({ subsets: ["latin", "arabic"] });
 
-export const metadata: Metadata = {
-  title: "lol",
-};
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: SupportedLocale };
+}) {
+  return {
+    title: tt(locale, {
+      en: "FCAI - Students Portal",
+      ar: "كلية الحاسبات والذكاء الصناعي - بوابة الطلاب",
+    }),
+  };
+}
 
 export default function RootLayout({
   children,

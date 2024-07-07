@@ -117,13 +117,17 @@ export default async function Page() {
         </div>
       </div>
       <div className="flex-col py-4 w-full">
-        <h2>{t("home.schedule")}</h2>
-        <Schedule
-          days={days}
-          slots={slots}
-          timeRanges={timeRanges}
-          schedule={schedule}
-        />
+        {schedule.length > 0 && (
+          <>
+            <h2>{t("home.schedule")}</h2>
+            <Schedule
+              days={days}
+              slots={slots}
+              timeRanges={timeRanges}
+              schedule={schedule}
+            />
+          </>
+        )}
       </div>
       <div className="flex gap-4 py-4 w-full">
         <div className="w-full">

@@ -1,8 +1,7 @@
 import { fakeResponse } from "@/dummy/utils";
-import { getProfileAction } from "./actions";
 import ProfileDisplay from "./ProfileDisplay";
 import { dummyStudents } from "@/dummy/students";
-import { StudentType } from "@fcai-sis/shared-models";
+import { ScientificDivision, StudentType } from "@fcai-sis/shared-models";
 
 export default async function Page() {
   // const profileDataResponse = await getProfileAction();
@@ -21,7 +20,7 @@ export default async function Page() {
   const _immutableProfileFields: Partial<StudentType>[] = [
     { studentId: _student.studentId },
     { fullName: _student.fullName },
-    { scientificDivision: _student.scientificDivision },
+    { scientificDivision: _student.scientificDivision as ScientificDivision },
     { nationality: _student.nationality },
   ];
 

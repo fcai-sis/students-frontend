@@ -19,7 +19,7 @@ export default async function Page({
         <span>
           {tt(locale, {
             en: "To create a service request, go to the ",
-            ar: "",
+            ar: "لإنشاء طلب خدمة، اذهب إلى ",
           })}
         </span>
         <a
@@ -35,7 +35,7 @@ export default async function Page({
         <span>
           {tt(locale, {
             en: ", choose Student Affairs, and then fill out the form for the service you need.",
-            ar: "",
+            ar: "، اختر شؤون الطلاب، واملأ النموذج للخدمة التي تحتاجها.",
           })}
         </span>
       </p>
