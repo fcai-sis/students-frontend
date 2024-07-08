@@ -156,45 +156,34 @@ export default async function Page({
                     <div className="text-sm text-slate-600">N/A</div>
                   )}
                 </td>
-                {enrollment.status !== EnrollmentStatusEnum[0] ? (
-                  <>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-600">
-                        {enrollment.grade}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-600">
-                        {enrollment.finalExamMark}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-600">
-                        {enrollment.termWorkMark}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-600">
-                        {enrollment.finalExamMark + enrollment.termWorkMark}
-                      </div>
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-600">N/A</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-600">N/A</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-600">N/A</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-600">N/A</div>
-                    </td>
-                  </>
-                )}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-slate-600">
+                    {enrollment.grade ??
+                      tt(locale, {
+                        en: "Not graded yet",
+                        ar: "لم يتم تقييمه بعد",
+                      })}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-slate-600">
+                    {enrollment.finalExamMark ??
+                      tt(locale, { en: "N/A", ar: "غير متوفر" })}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-slate-600">
+                    {enrollment.termWorkMark ??
+                      tt(locale, { en: "N/A", ar: "غير متوفر" })}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-slate-600">
+                    {enrollment.finalExamMark && enrollment.termWorkMark
+                      ? enrollment.finalExamMark + enrollment.termWorkMark
+                      : tt(locale, { en: "N/A", ar: "غير متوفر" })}
+                  </div>
+                </td>
                 {/* <td className="px-6 py-4 whitespace-nowrap">
                   <Link
                     href={`/courses/${enrollment.course.code}`}

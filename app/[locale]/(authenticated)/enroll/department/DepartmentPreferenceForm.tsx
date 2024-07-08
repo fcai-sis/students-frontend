@@ -60,13 +60,18 @@ export default function DepartmentPreferenceForm({
       await submitDepartmentPreferenceAction(values);
 
     if (!submitDepartmentPreferenceResponse.success) {
-      return toast.error(
-        submitDepartmentPreferenceResponse.error?.message ??
-          "Failed to submit department preferences"
-      );
+      for (const error of submitDepartmentPreferenceResponse.errors) {
+        toast.error(error.message);
+      }
+      return;
     }
 
-    toast.success("Department preferences submitted successfully");
+    toast.success(
+      tt(locale, {
+        en: "Department preferences submitted successfully",
+        ar: "تم تقديم تفضيلات الأقسام بنجاح",
+      })
+    );
     router.push(`/`);
   };
 

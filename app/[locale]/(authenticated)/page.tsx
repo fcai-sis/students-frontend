@@ -49,8 +49,8 @@ export default async function Page() {
   const t = await getI18n();
   const locale = getCurrentLocale();
 
-  const getStudentResponse = await getStudent();
-  const student = getStudentResponse.student;
+  const { student } = await getStudent();
+  const bylaw = student.bylaw;
 
   const { announcements } = await getAnnouncements({
     page: 1,
@@ -92,7 +92,7 @@ export default async function Page() {
             <RadialProgress
               colorize={false}
               value={student.mandatoryHours + student.electiveHours}
-              max={130}
+              max={bylaw.graduateRequirement}
             />
             <p>
               <b>
@@ -104,7 +104,11 @@ export default async function Page() {
             </p>
           </div>
           <div className="flex flex-col items-center">
-            <RadialProgress colorize value={student.gpa} max={4} />
+            <RadialProgress
+              colorize
+              value={parseFloat(`${student.gpa.toFixed(2)}`)}
+              max={bylaw.gpaScale}
+            />
             <p>
               <b>
                 {tt(locale, {

@@ -22,9 +22,7 @@ export const submitDepartmentPreferenceAction = async (
   if (response.status !== 201) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 
