@@ -21,18 +21,19 @@ async function getTopStudents(filter: {
 }
 
 export default async function Page({
-  searchParams: { major, level },
+  searchParams: { major, level, limit },
 }: {
   searchParams: {
     major?: string;
     level?: number;
+    limit?: number;
   };
 }) {
   const locale = getCurrentLocale();
   const { students } = await getTopStudents({
     major,
     level,
-    limit: 10,
+    limit: limit ?? 10,
   });
 
   const { departments } = await getDepartments();
@@ -53,14 +54,28 @@ export default async function Page({
     },
     ...departments.map((department: any) => ({
       value: department.id,
-      label: department.code,
+      label: tt(locale, department.name),
     })),
   ];
 
-  const levelOptions = Array.from({ length: 4 }, (_, i) => i + 1).map((i) => ({
-    value: `${i}`,
-    label: tt(locale, localizedLevel(i)),
-  }));
+  const levelOptions = [
+    {
+      value: "",
+      label: tt(locale, {
+        en: "All Levels",
+        ar: "جميع المستويات",
+      }),
+    },
+    ...Array.from({ length: 4 }, (_, i) => i + 1).map((i) => ({
+      value: `${i}`,
+      label: tt(locale, localizedLevel(i)),
+    })),
+  ];
+
+  // const limitOptions = [10, 20, 50, 100].map((i) => ({
+  //   value: `${i}`,
+  //   label: i,
+  // }));
 
   return (
     <>
@@ -129,7 +144,7 @@ export default async function Page({
                   {student.fullName}
                 </td>
                 <td className="px-2 py-3 text-startleft text-xs font-medium text-slate-600 uppercase tracking-wider">
-                  {student.gpa}
+                  {student.gpa.toFixed(2)}
                 </td>
               </tr>
             ))}
